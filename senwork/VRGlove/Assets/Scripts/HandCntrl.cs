@@ -9,7 +9,7 @@ public class HandCntrl : MonoBehaviour
     public Animator animator;
     private bool fg;
     private float f1;
-    private float f2;
+    private float f2; 
     
     // Start is called before the first frame update
     void Start()
@@ -97,7 +97,7 @@ public class HandCntrl : MonoBehaviour
         if(f2>90){
             f2=90;
         }
-        f2 = f2/90.0f;
+        f2 = f2/90.1f;
         animator.SetFloat("f2",f2);
         animator.SetFloat("f3",f2);
         animator.SetFloat("f4",f2);

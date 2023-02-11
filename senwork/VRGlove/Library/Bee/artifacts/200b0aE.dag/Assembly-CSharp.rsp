@@ -325,6 +325,7 @@
 -r:"/Users/Sentaro/GitHub/hanabusa-lab/2022_3rd_vr/senwork/VRGlove/Library/PackageCache/com.unity.nuget.newtonsoft-json@3.0.2/Runtime/Newtonsoft.Json.dll"
 -r:"/Users/Sentaro/GitHub/hanabusa-lab/2022_3rd_vr/senwork/VRGlove/Library/PackageCache/com.unity.testtools.codecoverage@1.0.1/lib/ReportGenerator/ReportGeneratorMerged.dll"
 -r:"/Users/Sentaro/GitHub/hanabusa-lab/2022_3rd_vr/senwork/VRGlove/Library/PackageCache/com.unity.visualscripting@1.7.8/Runtime/VisualScripting.Flow/Dependencies/NCalc/Unity.VisualScripting.Antlr3.Runtime.dll"
+-r:"Library/Bee/artifacts/200b0aE.dag/Assembly-CSharp-firstpass.ref.dll"
 -r:"Library/Bee/artifacts/200b0aE.dag/Unity.EditorCoroutines.Editor.ref.dll"
 -r:"Library/Bee/artifacts/200b0aE.dag/Unity.Performance.Profile-Analyzer.Editor.ref.dll"
 -r:"Library/Bee/artifacts/200b0aE.dag/Unity.PlasticSCM.Editor.ref.dll"
@@ -351,8 +352,19 @@
 -r:"Library/Bee/artifacts/200b0aE.dag/Unity.VSCode.Editor.ref.dll"
 -r:"Library/Bee/artifacts/200b0aE.dag/UnityEditor.UI.ref.dll"
 -r:"Library/Bee/artifacts/200b0aE.dag/UnityEngine.UI.ref.dll"
+"Assets/Scripts/BLEDebugMAC.cs"
 "Assets/Scripts/ConnectButton.cs"
 "Assets/Scripts/HandCntrl.cs"
+"Assets/Shatalmic/Example/ArduinoHM10Test/ArduinoHM10Test.cs"
+"Assets/Shatalmic/Example/iBeaconExample/iBeaconExampleScript.cs"
+"Assets/Shatalmic/Example/iBeaconExample/iBeaconItemScript.cs"
+"Assets/Shatalmic/Example/MultipleLevels/DeviceObject.cs"
+"Assets/Shatalmic/Example/MultipleLevels/FoundDeviceListScript.cs"
+"Assets/Shatalmic/Example/MultipleLevels/Level1Script.cs"
+"Assets/Shatalmic/Example/MultipleLevels/Level2Script.cs"
+"Assets/Shatalmic/Example/ScannerTest/ScannedItemScript.cs"
+"Assets/Shatalmic/Example/ScannerTest/ScannerTestScript.cs"
+"Assets/Shatalmic/Example/StartingExample/StartingExample.cs"
 -langversion:9.0
 
 /deterministic

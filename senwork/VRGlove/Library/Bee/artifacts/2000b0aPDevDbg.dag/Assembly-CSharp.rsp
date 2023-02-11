@@ -284,6 +284,7 @@
 -r:"/Applications/Unity/Hub/Editor/2021.3.8f1/Unity.app/Contents/NetStandard/ref/2.1.0/netstandard.dll"
 -r:"/Users/Sentaro/GitHub/hanabusa-lab/2022_3rd_vr/senwork/VRGlove/Library/PackageCache/com.unity.nuget.newtonsoft-json@3.0.2/Runtime/AOT/Newtonsoft.Json.dll"
 -r:"/Users/Sentaro/GitHub/hanabusa-lab/2022_3rd_vr/senwork/VRGlove/Library/PackageCache/com.unity.visualscripting@1.7.8/Runtime/VisualScripting.Flow/Dependencies/NCalc/Unity.VisualScripting.Antlr3.Runtime.dll"
+-r:"Library/Bee/artifacts/2000b0aPDevDbg.dag/Assembly-CSharp-firstpass.ref.dll"
 -r:"Library/Bee/artifacts/2000b0aPDevDbg.dag/Unity.Services.Core.Analytics.ref.dll"
 -r:"Library/Bee/artifacts/2000b0aPDevDbg.dag/Unity.Services.Core.Environments.ref.dll"
 -r:"Library/Bee/artifacts/2000b0aPDevDbg.dag/Unity.Services.Core.ref.dll"
@@ -295,6 +296,16 @@
 -r:"Library/Bee/artifacts/2000b0aPDevDbg.dag/UnityEngine.UI.ref.dll"
 "Assets/Scripts/ConnectButton.cs"
 "Assets/Scripts/HandCntrl.cs"
+"Assets/Shatalmic/Example/ArduinoHM10Test/ArduinoHM10Test.cs"
+"Assets/Shatalmic/Example/iBeaconExample/iBeaconExampleScript.cs"
+"Assets/Shatalmic/Example/iBeaconExample/iBeaconItemScript.cs"
+"Assets/Shatalmic/Example/MultipleLevels/DeviceObject.cs"
+"Assets/Shatalmic/Example/MultipleLevels/FoundDeviceListScript.cs"
+"Assets/Shatalmic/Example/MultipleLevels/Level1Script.cs"
+"Assets/Shatalmic/Example/MultipleLevels/Level2Script.cs"
+"Assets/Shatalmic/Example/ScannerTest/ScannedItemScript.cs"
+"Assets/Shatalmic/Example/ScannerTest/ScannerTestScript.cs"
+"Assets/Shatalmic/Example/StartingExample/StartingExample.cs"
 -langversion:9.0
 
 /deterministic

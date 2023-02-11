@@ -277,7 +277,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 619e34bf89f944823b530a1315c16d08, type: 3}
       propertyPath: m_Name
-      value: hand
+      value: MyHand
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 619e34bf89f944823b530a1315c16d08, type: 3}
       propertyPath: m_Enabled
@@ -641,6 +641,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
+--- !u!114 &996575831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 996575825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c6d76094fbdb4ba5b1829f8f9a29685, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DeviceName: BBC micro:bit [zovog]
+  ServiceUUID: 6e400001-b5a3-f393-e0a9-e50e24dcca9e
+  LedUUID: A9E90001-194C-4523-A473-5FDF36AA4D20
+  ButtonUUID: 6e400002-b5a3-f393-e0a9-e50e24dcca9e
+  hand: {fileID: 0}
 --- !u!1 &2011324042
 GameObject:
   m_ObjectHideFlags: 0
