@@ -294,6 +294,8 @@
 -r:"Library/Bee/artifacts/2000b0aPDevDbg.dag/Unity.VisualScripting.Flow.ref.dll"
 -r:"Library/Bee/artifacts/2000b0aPDevDbg.dag/Unity.VisualScripting.State.ref.dll"
 -r:"Library/Bee/artifacts/2000b0aPDevDbg.dag/UnityEngine.UI.ref.dll"
+"Assets/Anaglyph/Anaglyph.cs"
+"Assets/Scripts/BLEDebugMAC.cs"
 "Assets/Scripts/ConnectButton.cs"
 "Assets/Scripts/HandCntrl.cs"
 "Assets/Shatalmic/Example/ArduinoHM10Test/ArduinoHM10Test.cs"

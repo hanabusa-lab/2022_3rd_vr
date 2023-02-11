@@ -57,6 +57,7 @@ public class HandCntrl : MonoBehaviour
         public string p;
         public string r;
     }
+
     // micro:bitの加速度計のx軸方向の値を受け取ります
     public void OnGloveAngleChanged(String json)
     {
@@ -81,6 +82,7 @@ public class HandCntrl : MonoBehaviour
         public string f1;
         public string f2;
     }
+
     public void OnGloveFingureChanged(String json)
     {
         GloveFingure fingure = JsonUtility.FromJson<GloveFingure>(json);
@@ -99,9 +101,17 @@ public class HandCntrl : MonoBehaviour
         }
         f2 = f2/90.1f;
         animator.SetFloat("f2",f2);
-        animator.SetFloat("f3",f2);
-        animator.SetFloat("f4",f2);
-        animator.SetFloat("f5",f2);
+
+        //チョキ対応 f1の値がみの値が大きい場合には、f3-f5は握ったままにする。
+        float f3 = f2;
+        float of = f2;
+        if(f1 > 0.5f){
+            of = 1.0f;
+            f3 = f2;
+        }
+        animator.SetFloat("f3",f3);
+        animator.SetFloat("f4",of);
+        animator.SetFloat("f5",of);
     }
 
 }

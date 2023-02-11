@@ -1,6 +1,8 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
+    - Anaglyph
+    - BLEDebugMAC
     - ConnectButton
     - HandCntrl
     Unity.Rider.Editor.dll:
@@ -13,10 +15,8 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -88,6 +88,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
+    - Class: 84
+      Script: {instanceID: 0}
     - Class: 89
       Script: {instanceID: 0}
     - Class: 90
@@ -101,31 +103,35 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 1562}
+      Script: {instanceID: 1590}
     - Class: 114
-      Script: {instanceID: 2184}
+      Script: {instanceID: 2212}
     - Class: 114
-      Script: {instanceID: 2618}
+      Script: {instanceID: 2646}
     - Class: 114
-      Script: {instanceID: 2844}
+      Script: {instanceID: 2872}
     - Class: 114
-      Script: {instanceID: 3146}
+      Script: {instanceID: 3174}
     - Class: 114
-      Script: {instanceID: 4212}
+      Script: {instanceID: 4240}
     - Class: 114
-      Script: {instanceID: 4482}
+      Script: {instanceID: 4510}
     - Class: 114
-      Script: {instanceID: 5248}
+      Script: {instanceID: 5276}
     - Class: 114
-      Script: {instanceID: 5526}
+      Script: {instanceID: 5554}
     - Class: 114
-      Script: {instanceID: 5862}
+      Script: {instanceID: 5890}
     - Class: 114
-      Script: {instanceID: 6358}
+      Script: {instanceID: 5894}
     - Class: 114
-      Script: {instanceID: 25076}
+      Script: {instanceID: 6388}
     - Class: 114
-      Script: {instanceID: 25618}
+      Script: {instanceID: 6750}
+    - Class: 114
+      Script: {instanceID: 25842}
+    - Class: 114
+      Script: {instanceID: 30358}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -675,6 +681,12 @@ ScriptsOnlyBuild:
     className: CanvasScaler
   - hash:
       serializedVersion: 2
+      Hash: 66bca5cc6a18c5298ec75235e56a84d6
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ConnectButton
+  - hash:
+      serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Unity.VisualScripting.Core.dll
     namespaceName: Unity.VisualScripting
@@ -745,6 +757,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
     className: Outline
+  - hash:
+      serializedVersion: 2
+      Hash: 30f3213a6e218a461fa00e428f22d3eb
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: HandCntrl
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
@@ -921,16 +939,76 @@ ScriptsOnlyBuild:
     className: UnityOnSliderValueChangedMessageListener
   - hash:
       serializedVersion: 2
-      Hash: 30f3213a6e218a461fa00e428f22d3eb
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
-    className: HandCntrl
+    className: Level1Script
   - hash:
       serializedVersion: 2
-      Hash: 66bca5cc6a18c5298ec75235e56a84d6
+      Hash: b155a8bc3751da43448d710dd669749d
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
-    className: ConnectButton
+    className: ScannerTestScript
+  - hash:
+      serializedVersion: 2
+      Hash: 03d2a4b077ac7e38724d4e9253e417c9
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Level2Script
+  - hash:
+      serializedVersion: 2
+      Hash: 0c9c7d49fefe41ff0682cbe7468a39b0
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ArduinoHM10Test
+  - hash:
+      serializedVersion: 2
+      Hash: 1cd28d58521b485c1cea42645bcde668
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ScannedItemScript
+  - hash:
+      serializedVersion: 2
+      Hash: 9c1b8157f0eb7c9893293278ed2b12a2
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: iBeaconExampleScript
+  - hash:
+      serializedVersion: 2
+      Hash: 549fdbc60fc5c23e3aca6e1c9e40e37c
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: StartingExample
+  - hash:
+      serializedVersion: 2
+      Hash: b81762ea2de94f3f8a478eec4dbccade
+    assemblyName: Assembly-CSharp-firstpass.dll
+    namespaceName: 
+    className: BluetoothDeviceScript
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: FoundDeviceListScript
+  - hash:
+      serializedVersion: 2
+      Hash: 477e5b2c63616e8b7c43ba8694058c03
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: iBeaconItemScript
+  - hash:
+      serializedVersion: 2
+      Hash: 0ce4c4bf7fdf73e767004918f4d5fee8
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: BLEDebugMAC
+  - hash:
+      serializedVersion: 2
+      Hash: 051209befea484124d4f7f2e981f851e
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Anaglyph
   platform: 20
   scenePathNames:
   - Assets/Scenes/SampleScene.unity

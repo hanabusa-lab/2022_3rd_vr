@@ -1,5 +1,4 @@
 Unity.Collections.LowLevel.Unsafe.UnsafeUtility::Free
-Unity.Collections.LowLevel.Unsafe.UnsafeUtility::MemCpy
 Unity.Collections.LowLevel.Unsafe.UnsafeUtility::MemCpyStride
 Unity.Collections.LowLevel.Unsafe.UnsafeUtility::MemSet
 Unity.Collections.LowLevel.Unsafe.UnsafeUtility::Malloc
@@ -190,6 +189,7 @@ UnityEngine.Gradient::Internal_Equals
 UnityEngine.Gradient::Init
 UnityEngine.Gradient::Cleanup
 UnityEngine.Graphics::Internal_GetMaxDrawMeshInstanceCount
+UnityEngine.Graphics::Internal_BlitMaterial5
 UnityEngine.Graphics::Internal_SetNullRT
 UnityEngine.Graphics::Internal_SetRTSimple_Injected
 UnityEngine.GUI::get_changed
@@ -290,6 +290,7 @@ UnityEngine.Input::set_compositionCursorPos_Injected
 UnityEngine.Input::set_imeCompositionMode
 UnityEngine.Input::get_imeCompositionMode
 UnityEngine.JsonUtility::FromJsonInternal
+UnityEngine.JsonUtility::ToJsonInternal
 UnityEngine.Light::get_useColorTemperature
 UnityEngine.Light::get_bounceIntensity
 UnityEngine.Light::get_colorTemperature
@@ -396,8 +397,6 @@ UnityEngine.PlayerConnectionInternal::PollInternal
 UnityEngine.PlayerConnectionInternal::RegisterInternal
 UnityEngine.PlayerConnectionInternal::SendMessage
 UnityEngine.PlayerConnectionInternal::UnregisterInternal
-UnityEngine.Profiling.Profiler::BeginSampleImpl
-UnityEngine.Profiling.Profiler::EndSample
 UnityEngine.PropertyNameUtils::PropertyNameFromString_Injected
 UnityEngine.QualitySettings::get_activeColorSpace
 UnityEngine.Quaternion::AngleAxis_Injected
