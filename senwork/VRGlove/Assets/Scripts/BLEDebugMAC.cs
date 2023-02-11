@@ -14,8 +14,7 @@ public class BLEDebugMAC : MonoBehaviour
 {
     public string DeviceName = "BBC micro:bit [zovog]";
     public string ServiceUUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
-    public string LedUUID = "A9E90001-194C-4523-A473-5FDF36AA4D20";
-    public string ButtonUUID = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
+    public string UARTUUID = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
     public GameObject hand;
    
     enum States
@@ -35,8 +34,8 @@ public class BLEDebugMAC : MonoBehaviour
     private float _timeout = 0f;
     private States _state = States.None;
     private string _deviceAddress;
-    private bool _foundButtonUUID = false;
-    private bool _foundLedUUID = false;
+    private bool _foundUARTUUID = false;
+    //private bool _foundLedUUID = false;
     private bool _rssiOnly = false;
     private int _rssi = 0;
 
@@ -58,8 +57,8 @@ public class BLEDebugMAC : MonoBehaviour
         _timeout = 0f;
         _state = States.None;
         _deviceAddress = null;
-        _foundButtonUUID = false;
-        _foundLedUUID = false;
+        _foundUARTUUID = false;
+        //_foundLedUUID = false;
         _rssi = 0;
     }
 
@@ -89,17 +88,6 @@ public class BLEDebugMAC : MonoBehaviour
     {
         hand = GameObject.Find("Hand");
         StartProcess();
-
-        
-    }
-
-    private void ProcessButton(byte[] bytes)
-    {
-    /*    if (bytes[0] == 0x00)
-            ButtonPositionText.text = "Not Pushed";
-        else
-            ButtonPositionText.text = "Pushed";
-    */
     }
 
     [Serializable]
@@ -223,8 +211,8 @@ public class BLEDebugMAC : MonoBehaviour
                         StatusMessage = "Connecting...";
 
                         // set these flags
-                        _foundButtonUUID = false;
-                        _foundLedUUID = false;
+                        //_foundButtonUUID = false;
+                        _foundUARTUUID = false;
 
                         // note that the first parameter is the address, not the name. I have not fixed this because
                         // of backwards compatiblity.
@@ -241,14 +229,14 @@ public class BLEDebugMAC : MonoBehaviour
                             {
                                 StatusMessage = "Found Service UUID";
 
-                                _foundButtonUUID = _foundButtonUUID || IsEqual(characteristicUUID, ButtonUUID);
-                                _foundLedUUID = _foundLedUUID || IsEqual(characteristicUUID, LedUUID);
+                                _foundUARTUUID = _foundUARTUUID || IsEqual(characteristicUUID, UARTUUID);
+                                //_foundLedUUID = _foundLedUUID || IsEqual(characteristicUUID, LedUUID);
 
                                 // if we have found both characteristics that we are waiting for
                                 // set the state. make sure there is enough timeout that if the
                                 // device is still enumerating other characteristics it finishes
                                 // before we try to subscribe
-                                if (_foundButtonUUID)
+                                if (_foundUARTUUID)
                                 //if (_foundButtonUUID && _foundLedUUID)
                                 {
                                     _connected = true;
@@ -272,7 +260,7 @@ public class BLEDebugMAC : MonoBehaviour
                     case States.Subscribe:
                         StatusMessage = "Subscribing to characteristics...";
 
-                        BluetoothLEHardwareInterface.SubscribeCharacteristicWithDeviceAddress(_deviceAddress, ServiceUUID, ButtonUUID, (notifyAddress, notifyCharacteristic) =>
+                        BluetoothLEHardwareInterface.SubscribeCharacteristicWithDeviceAddress(_deviceAddress, ServiceUUID, UARTUUID, (notifyAddress, notifyCharacteristic) =>
                         {
                             StatusMessage = "Subscribing";
                             _state = States.None;
@@ -310,7 +298,7 @@ public class BLEDebugMAC : MonoBehaviour
                         break;
 
                     case States.Unsubscribe:
-                        BluetoothLEHardwareInterface.UnSubscribeCharacteristic(_deviceAddress, ServiceUUID, ButtonUUID, null);
+                        BluetoothLEHardwareInterface.UnSubscribeCharacteristic(_deviceAddress, ServiceUUID, UARTUUID, null);
                         SetState(States.Disconnect, 4f);
                         break;
 
@@ -377,12 +365,12 @@ public class BLEDebugMAC : MonoBehaviour
 
     void SendByte(byte value)
     {
-        byte[] data = { value };
+        /*byte[] data = { value };
         BluetoothLEHardwareInterface.WriteCharacteristic(_deviceAddress, ServiceUUID, LedUUID, data, data.Length, true, (characteristicUUID) =>
         {
 
             BluetoothLEHardwareInterface.Log("Write Succeeded");
-        });
+        });*/
     }
 }
 
