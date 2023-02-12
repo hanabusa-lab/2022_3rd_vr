@@ -1,8 +1,8 @@
 var blePlugin = {
-    // 接続中のBluetoothデバイス
+    // accessing Bluetooth device
     $devices: {},
 
-    // Bluetoothデバイスに接続中かどうかを返します
+    // Check Bluetooth device connection
     IsConnected: function (targetName) {
         console.log('>>> isConnect');
 
@@ -21,7 +21,7 @@ var blePlugin = {
         return result;
     },
 
-    // Bluetoothデバイスに接続します
+    // connect Bluetooth device
     Connect: function (targetName) {
         console.log('>>> connect');
 
@@ -42,15 +42,15 @@ var blePlugin = {
         var bluetoothServer;
         var accelerometerService;
         var buttonService;
-        //追加 aihara
+        //add by aihara
         var uartService;
 
-        // Bluetoothデバイスを取得します
+        // get Bluetooth device
         var options = {
             filters: [
                 { namePrefix: 'BBC micro:bit' }
             ],
-            //変更 aihara
+            //add aihara
             //optionalServices: [ACCELEROMETER_SERVICE_UUID, BUTTON_SERVICE_UUID]
             optionalServices: [UUID_UART_SERVICE]
 
@@ -60,20 +60,20 @@ var blePlugin = {
                 console.log('id:' + device.id);
                 console.log('name:' + device.name);
 
-                // 接続が切れたら通知を受け取ります
+                // get notification after disconnect
                 device.addEventListener('gattserverdisconnected', function (e) {
                     console.log('gattserverdisconnected');
                     SendMessage(target, 'OnDisconnected');
                 });
 
-                // デバイスに接続します
+                // connect to device
                 return device.gatt.connect();
             })
             .then(function (server) {
                 console.log('connected.');
                 devices[target] = server.device;
 
-                // UARTサービスを取得します
+                // get UART service
                 bluetoothServer = server;
                 return bluetoothServer.getPrimaryService(UUID_UART_SERVICE);
             })
@@ -86,18 +86,17 @@ var blePlugin = {
             .then(function (characteristic) {
                 console.log('getCharacteristic');
 
-                // UARTの値の取得を開始します
+                // get UART value
                 return characteristic.startNotifications();
             })
             .then(function (characteristic) {
                 console.log('startNotifications');
 
-                // UARTの値を受け取ります
+                // get UART value
                 characteristic.addEventListener('characteristicvaluechanged', function (ev) {
                     var recvValue = new TextDecoder().decode(ev.target.value).replace(/\r?\n/g, '');
                     console.log("ble input value3=", recvValue);
-                    //値を分解する。p:0,r:0,f1:0,f2:0
-                    //UARTでの送信長さがあるようなので、p&r, f1&f2で分けてやり取りする。
+                    //divide p:0,r:0,f1:0,f2:0
                     var p=0,r=0,f1=0,f2=0;
                     if (recvValue.charAt(0) == "p") {
                         var vals = recvValue.split(',');
@@ -132,100 +131,6 @@ var blePlugin = {
                     //SendMessage(target, 'OnAccelerometerChanged', x);
                 });
             })
-/*
- 一度、以前のサービスなどなコメントアウトする
-            .then(function (server) {
-                console.log('connected.');
-                devices[target] = server.device;
-
-                // 加速度計サービスを取得します
-                bluetoothServer = server;
-                return bluetoothServer.getPrimaryService(ACCELEROMETER_SERVICE_UUID);
-            })
-            .then(function (service) {
-                console.log('getPrimaryService');
-
-                accelerometerService = service;
-                return accelerometerService.getCharacteristic(ACCELEROMETER_PERIOD_CHARACTERISTIC_UUID);
-            })
-            .then(function (characteristic) {
-                console.log('getCharacteristic');
-
-                // 加速度計の値の取得間隔を設定します
-                var period = new Uint16Array([20]);
-                return characteristic.writeValue(period);
-            })
-            .then(function () {
-                console.log('writeValue');
-
-                return accelerometerService.getCharacteristic(ACCELEROMETER_DATA_CHARACTERISTIC_UUID);
-            })
-            .then(function (characteristic) {
-                console.log('getCharacteristic');
-
-                // 加速度計の値の取得を開始します
-                return characteristic.startNotifications();
-            })
-            .then(function (characteristic) {
-                console.log('startNotifications');
-
-                // 加速度計の値を受け取ります
-                characteristic.addEventListener('characteristicvaluechanged', function (ev) {
-                    var value = ev.target.value;
-                    var x = value.getInt16(0, true);
-                    var y = value.getInt16(2, true);
-                    var z = value.getInt16(4, true);
-                    // 加速度計のx方向の値をUnityのオブジェクトへ通知します
-                    // x方向の値をmicro:bitの傾きとして処理します
-                    SendMessage(target, 'OnAccelerometerChanged', x);
-                });
-
-                // ボタンサービスを取得します
-                return bluetoothServer.getPrimaryService(BUTTON_SERVICE_UUID);
-            })
-            .then(function (service) {
-                console.log('getPrimaryService');
-
-                buttonService = service;
-                return buttonService.getCharacteristic(BUTTON_A_STATE_CHARACTERISTIC_UUID);
-            })
-            .then(function (characteristic) {
-                console.log('getCharacteristic');
-
-                // ボタンAの通知の取得を開始します
-                return characteristic.startNotifications();
-            })
-            .then(function (characteristic) {
-                console.log('startNotifications');
-
-                // ボタンAの通知を受け取ります
-                characteristic.addEventListener('characteristicvaluechanged', function (ev) {
-                    var value = ev.target.value;
-                    var state = value.getUint8();
-                    // ボタンAの状態をUnityのオブジェクトへ通知します
-                    SendMessage(target, 'OnButtonAChanged', state);
-                });
-
-                return buttonService.getCharacteristic(BUTTON_B_STATE_CHARACTERISTIC_UUID);
-            })
-            .then(function (characteristic) {
-                console.log('getCharacteristic');
-
-                // ボタンBの通知の取得を開始します
-                return characteristic.startNotifications();
-            })
-            .then(function (characteristic) {
-                console.log('startNotifications');
-
-                // ボタンBの通知を受け取ります
-                characteristic.addEventListener('characteristicvaluechanged', function (ev) {
-                    var value = ev.target.value;
-                    var state = value.getUint8();
-                    // ボタンBの状態をUnityのオブジェクトへ通知します
-                    SendMessage(target, 'OnButtonBChanged', state);
-                });
-            })
-*/
             .catch(function (err) {
                 console.log('err:' + err);
 
@@ -240,7 +145,7 @@ var blePlugin = {
         console.log('<<< connect');
     },
 
-    // Bluetoothデバイスを切断します
+    // disconnect bluetooth device
     Disconnect: function (targetName) {
         console.log('>>> disconnect');
 
@@ -249,7 +154,7 @@ var blePlugin = {
 
         if (devices[target]) {
             console.log('device:' + devices[target]);
-            // デバイスに接続中なら切断します
+            // disconnect if connecting
             devices[target].gatt.disconnect();
             delete devices[target];
         }
