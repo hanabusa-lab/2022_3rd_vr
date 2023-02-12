@@ -6,7 +6,9 @@ var blePlugin = {
     IsConnected: function (targetName) {
         console.log('>>> isConnect');
 
-        var target = Pointer_stringify(targetName);
+        //var target = Pointer_stringify(targetName);
+        var target = UTF8ToString(targetName);
+        
         console.log('target:' + target);
 
         var result = false;
@@ -25,7 +27,9 @@ var blePlugin = {
     Connect: function (targetName) {
         console.log('>>> connect');
 
-        var target = Pointer_stringify(targetName);
+        //var target = Pointer_stringify(targetName);
+        var target = UTF8ToString(targetName);
+        
         console.log('target:' + target);
 
         var ACCELEROMETER_SERVICE_UUID = 'e95d0753-251d-470a-a062-fa1922dfa9a8';
@@ -149,7 +153,8 @@ var blePlugin = {
     Disconnect: function (targetName) {
         console.log('>>> disconnect');
 
-        var target = Pointer_stringify(targetName);
+        //var target = Pointer_stringify(targetName);
+        var target = UTF8ToString(targetName);
         console.log('target:' + target);
 
         if (devices[target]) {
