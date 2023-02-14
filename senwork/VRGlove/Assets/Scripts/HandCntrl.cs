@@ -22,7 +22,7 @@ public class HandCntrl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButtonDown(1)){
+        /*if(Input.GetMouseButtonDown(1)){
             float value = animator.GetFloat("param1");
             Debug.Log("value="+f1.ToString());
             f1+=-0.1f;
@@ -47,7 +47,7 @@ public class HandCntrl : MonoBehaviour
             animator.SetFloat("f3",f1);
             animator.SetFloat("f4",f1);
             animator.SetFloat("f5",f1);
-        }
+        }*/
     }
 
     //micro:bitからの情報取得
