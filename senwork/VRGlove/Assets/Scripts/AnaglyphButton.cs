@@ -24,13 +24,14 @@ public class AnaglyphButton : MonoBehaviour
         if (enableFg)
         {
             GetComponentInChildren<Text>().text = "ノー立体メガネ";
-            camera.GetComponent<Anaglyph>().anaglyph_fg = true;
+            //camera.GetComponent<Anaglyph>().anaglyph_fg = true;
+            camera.GetComponent<Anaglyph>().enabled = true;
         }
         else
         {
             GetComponentInChildren<Text>().text = "立体メガネ";
-            camera.GetComponent<Anaglyph>().anaglyph_fg = false;
-       
+            //camera.GetComponent<Anaglyph>().anaglyph_fg = false;
+            camera.GetComponent<Anaglyph>().enabled = false;
         }
     }
 }
