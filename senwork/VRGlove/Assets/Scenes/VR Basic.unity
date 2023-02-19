@@ -1113,7 +1113,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4238ac2a1c62489da4b5b095e2b9717, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anaglyph_fg: 0
   mt_anaglyph: {fileID: 2100000, guid: 61df8eb01191f4d6199b5455882c22ee, type: 2}
 --- !u!1 &705507993
 GameObject:
@@ -1651,6 +1650,7 @@ GameObject:
   - component: {fileID: 1974353444}
   - component: {fileID: 1974353443}
   - component: {fileID: 1974353442}
+  - component: {fileID: 1974353445}
   m_Layer: 5
   m_Name: "\u30DC\u30FC\u30EB"
   m_TagString: Untagged
@@ -1723,9 +1723,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: ConnectButton, Assembly-CSharp
-        m_MethodName: OnClick
+      - m_Target: {fileID: 1974353445}
+        m_TargetAssemblyTypeName: ModeButtonCntrl, Assembly-CSharp
+        m_MethodName: OnClickSimpleBall
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1773,6 +1773,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1974353440}
   m_CullTransparentMesh: 1
+--- !u!114 &1974353445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1974353440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 532d7412685b541dabe9192e008808fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneCntrl: {fileID: 0}
 --- !u!1 &2011324042
 GameObject:
   m_ObjectHideFlags: 0
