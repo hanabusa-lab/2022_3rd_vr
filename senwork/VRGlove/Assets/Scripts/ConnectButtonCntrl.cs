@@ -22,8 +22,10 @@ public class ConnectButtonCntrl : MonoBehaviour
     {
         if (!bleCntrlWinrt.IsConnected()){
             bleCntrlWinrt.StartScanHandler();
+            GetComponentInChildren<Text>().text = "Disconnect";
         }else{
             bleCntrlWinrt.Disconnect();
+            GetComponentInChildren<Text>().text = "Connect";
         }
         
         /*
