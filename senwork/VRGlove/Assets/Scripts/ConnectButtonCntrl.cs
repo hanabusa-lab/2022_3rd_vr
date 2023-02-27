@@ -4,9 +4,10 @@ using UnityEngine.UI;
 
 public class ConnectButtonCntrl : MonoBehaviour
 {
-    public GameObject targetMac;
-    public GameObject targetWin;
-    public BleCntrlWinrt bleCntrlWinrt;
+    //public GameObject targetMac;
+    //public GameObject targetWin;
+    public BLECntrlWinrt bleCntrlWinrt;
+    [SerializeField] public GameObject connectBtn;
     /*
     [DllImport("__Internal")]
     private static extern bool IsConnected(string targetName);
@@ -20,13 +21,17 @@ public class ConnectButtonCntrl : MonoBehaviour
 
     public void OnClick()
     {
-        if (!bleCntrlWinrt.IsConnected()){
+         bleCntrlWinrt.Disconnect();
+        bleCntrlWinrt.StartScanHandler();
+       
+        //if (!bleCntrlWinrt.IsConnected()){
+        /*if (!bleCntrlWinrt.IsScanning()){
+            connectBtn.GetComponentInChildren<Text>().text = "Disconnect";
             bleCntrlWinrt.StartScanHandler();
-            GetComponentInChildren<Text>().text = "Disconnect";
         }else{
             bleCntrlWinrt.Disconnect();
             GetComponentInChildren<Text>().text = "Connect";
-        }
+        }*/
         
         /*
         if (!IsConnected(target.name))

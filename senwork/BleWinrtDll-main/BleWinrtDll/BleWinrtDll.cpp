@@ -36,7 +36,7 @@ guid make_guid(const wchar_t* value)
 	to_guid to_guid;
 	memset(&to_guid, 0, sizeof(to_guid));
 	int offset = 0;
-	for (int i = 0; i < wcslen(value); i++) {
+	for (unsigned int i = 0; i < wcslen(value); i++) {
 		if (value[i] >= '0' && value[i] <= '9')
 		{
 			uint8_t digit = value[i] - '0';
@@ -217,13 +217,29 @@ bool QuittableWait(condition_variable& signal, unique_lock<mutex>& waitLock) {
 
 void DeviceWatcher_Added(DeviceWatcher sender, DeviceInformation deviceInfo) {
 	DeviceUpdate deviceUpdate;
+
 	wcscpy_s(deviceUpdate.id, sizeof(deviceUpdate.id) / sizeof(wchar_t), deviceInfo.Id().c_str());
+
 	wcscpy_s(deviceUpdate.name, sizeof(deviceUpdate.name) / sizeof(wchar_t), deviceInfo.Name().c_str());
 	deviceUpdate.nameUpdated = true;
+
+	if (deviceInfo.Properties().HasKey(L"System.Devices.Aep.DeviceAddress")) {
+		wcscpy_s(deviceUpdate.mac, sizeof(deviceUpdate.mac) / sizeof(wchar_t), unbox_value<hstring>(deviceInfo.Properties().Lookup(L"System.Devices.Aep.DeviceAddress")).c_str());
+	}
 	if (deviceInfo.Properties().HasKey(L"System.Devices.Aep.Bluetooth.Le.IsConnectable")) {
 		deviceUpdate.isConnectable = unbox_value<bool>(deviceInfo.Properties().Lookup(L"System.Devices.Aep.Bluetooth.Le.IsConnectable"));
 		deviceUpdate.isConnectableUpdated = true;
 	}
+	if (deviceInfo.Properties().HasKey(L"System.Devices.Aep.Bluetooth.Le.IsConnected")) {
+		deviceUpdate.isConnected = unbox_value<bool>(deviceInfo.Properties().Lookup(L"System.Devices.Aep.Bluetooth.Le.IsConnected"));
+		deviceUpdate.isConnectedUpdated = true;
+	}
+	deviceUpdate.signalStrength = -999;
+	if (deviceInfo.Properties().HasKey(L"System.Devices.Aep.SignalStrength")) {
+		deviceUpdate.signalStrength = unbox_value<int32_t>(deviceInfo.Properties().Lookup(L"System.Devices.Aep.SignalStrength"));
+		deviceUpdate.hasSignalStrength = true;
+	}
+
 	{
 		lock_guard lock(quitLock);
 		if (quitFlag)
@@ -237,11 +253,25 @@ void DeviceWatcher_Added(DeviceWatcher sender, DeviceInformation deviceInfo) {
 }
 void DeviceWatcher_Updated(DeviceWatcher sender, DeviceInformationUpdate deviceInfoUpdate) {
 	DeviceUpdate deviceUpdate;
+
 	wcscpy_s(deviceUpdate.id, sizeof(deviceUpdate.id) / sizeof(wchar_t), deviceInfoUpdate.Id().c_str());
+
+	//null out the mac in an update since it's not available anywhere
+	deviceUpdate.mac[0] = 0;
+	
 	if (deviceInfoUpdate.Properties().HasKey(L"System.Devices.Aep.Bluetooth.Le.IsConnectable")) {
 		deviceUpdate.isConnectable = unbox_value<bool>(deviceInfoUpdate.Properties().Lookup(L"System.Devices.Aep.Bluetooth.Le.IsConnectable"));
 		deviceUpdate.isConnectableUpdated = true;
 	}
+	if (deviceInfoUpdate.Properties().HasKey(L"System.Devices.Aep.Bluetooth.Le.IsConnected")) {
+		deviceUpdate.isConnected = unbox_value<bool>(deviceInfoUpdate.Properties().Lookup(L"System.Devices.Aep.Bluetooth.Le.IsConnected"));
+		deviceUpdate.isConnectedUpdated = true;
+	}
+	if (deviceInfoUpdate.Properties().HasKey(L"System.Devices.Aep.SignalStrength")) {
+		deviceUpdate.signalStrength = unbox_value<int32_t>(deviceInfoUpdate.Properties().Lookup(L"System.Devices.Aep.SignalStrength"));
+		deviceUpdate.hasSignalStrength = true;
+	}
+	
 	{
 		lock_guard lock(quitLock);
 		if (quitFlag)
@@ -264,18 +294,21 @@ void StartDeviceScan() {
 		quitFlag = false;
 		clearError();
 	}
-
-	IVector<hstring> requestedProperties = single_threaded_vector<hstring>({ L"System.Devices.Aep.DeviceAddress", L"System.Devices.Aep.IsConnected", L"System.Devices.Aep.Bluetooth.Le.IsConnectable" });
+	
+	IVector<hstring> requestedProperties = single_threaded_vector<hstring>({ L"System.Devices.Aep.DeviceAddress", L"System.Devices.Aep.Bluetooth.Le.IsConnectable", L"System.Devices.Aep.IsConnected", L"System.Devices.Aep.SignalStrength"});
 	hstring aqsAllBluetoothLEDevices = L"(System.Devices.Aep.ProtocolId:=\"{bb7bb05e-5972-42b5-94fc-76eaa7084d49}\")"; // list Bluetooth LE devices
 	deviceWatcher = DeviceInformation::CreateWatcher(
 		aqsAllBluetoothLEDevices,
 		requestedProperties,
 		DeviceInformationKind::AssociationEndpoint);
-
+	
 	// see https://docs.microsoft.com/en-us/windows/uwp/cpp-and-winrt-apis/handle-events#revoke-a-registered-delegate
 	deviceWatcherAddedRevoker = deviceWatcher.Added(auto_revoke, &DeviceWatcher_Added);
+	
 	deviceWatcherUpdatedRevoker = deviceWatcher.Updated(auto_revoke, &DeviceWatcher_Updated);
+	
 	deviceWatcherCompletedRevoker = deviceWatcher.EnumerationCompleted(auto_revoke, &DeviceWatcher_EnumerationCompleted);
+
 	// ~30 seconds scan ; for permanent scanning use BluetoothLEAdvertisementWatcher, see the BluetoothAdvertisement.zip sample
 	deviceScanFinished = false;
 	deviceWatcher.Start();
@@ -285,15 +318,21 @@ ScanStatus PollDevice(DeviceUpdate* device, bool block) {
 	ScanStatus res;
 	unique_lock<mutex> lock(deviceQueueLock);
 	if (block && deviceQueue.empty() && !deviceScanFinished)
-		if (QuittableWait(deviceQueueSignal, lock))
+		if (QuittableWait(deviceQueueSignal, lock)) {
+			//saveError(L"Finish with QWuittableWait");
 			return ScanStatus::FINISHED;
+		}
+
 	if (!deviceQueue.empty()) {
 		*device = deviceQueue.front();
 		deviceQueue.pop();
 		res = ScanStatus::AVAILABLE;
 	}
-	else if (deviceScanFinished)
+	else if (deviceScanFinished) {
+		//saveError(L"Finish with deviceScanFinished");
+
 		res = ScanStatus::FINISHED;
+	}
 	else
 		res = ScanStatus::PROCESSING;
 	return res;
@@ -479,15 +518,11 @@ void Characteristic_ValueChanged(GattCharacteristic const& characteristic, GattV
 		dataQueueSignal.notify_one();
 	}
 }
-
-
 fire_and_forget SubscribeCharacteristicAsync(wchar_t* deviceId, wchar_t* serviceId, wchar_t* characteristicId, bool* result) {
 	try {
 		auto characteristic = co_await retrieveCharacteristic(deviceId, serviceId, characteristicId);
 		if (characteristic != nullptr) {
-			//auto status = co_await characteristic.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue::Notify);
 			auto status = co_await characteristic.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue::Notify);
-
 			if (status != GattCommunicationStatus::Success)
 				saveError(L"%s:%d Error subscribing to characteristic with uuid %s and status %d", __WFILE__, __LINE__, characteristicId, status);
 			else {
@@ -509,63 +544,44 @@ fire_and_forget SubscribeCharacteristicAsync(wchar_t* deviceId, wchar_t* service
 bool SubscribeCharacteristic(wchar_t* deviceId, wchar_t* serviceId, wchar_t* characteristicId, bool block) {
 	unique_lock<mutex> lock(subscribeQueueLock);
 	bool result = false;
-	//SubscribeCharacteristicAsync(deviceId, serviceId, characteristicId, block ? &result : 0);
-	SubscribeCharacteristicAsync(deviceId, serviceId, characteristicId, &result);
-
+	SubscribeCharacteristicAsync(deviceId, serviceId, characteristicId, block ? &result : 0);
 	if (block && QuittableWait(subscribeQueueSignal, lock))
 		return false;
 
 	return result;
 }
 
-fire_and_forget SubscribeCharacteristicAsyncIndicate(wchar_t* deviceId, wchar_t* serviceId, wchar_t* characteristicId, int* result) {
-	*result = 8;
+
+fire_and_forget SubscribeCharacteristicAsyncIndicate(wchar_t* deviceId, wchar_t* serviceId, wchar_t* characteristicId, bool* result) {
 	try {
 		auto characteristic = co_await retrieveCharacteristic(deviceId, serviceId, characteristicId);
-		*result = 2;
 		if (characteristic != nullptr) {
-			//auto status = co_await characteristic.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue::Notify);
 			auto status = co_await characteristic.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue::Indicate);
-			
-			*result = 3;
-			if (status != GattCommunicationStatus::Success) {
+			if (status != GattCommunicationStatus::Success)
 				saveError(L"%s:%d Error subscribing to characteristic with uuid %s and status %d", __WFILE__, __LINE__, characteristicId, status);
-				*result = 4;
-
-			}
 			else {
 				Subscription* subscription = new Subscription();
 				subscription->characteristic = characteristic;
 				subscription->revoker = characteristic.ValueChanged(auto_revoke, &Characteristic_ValueChanged);
 				subscriptions.push_back(subscription);
 				if (result != 0)
-					*result = 5;
-				*result = 6;
+					*result = true;
 			}
 		}
 	}
 	catch (hresult_error& ex)
 	{
-		*result = 7;
 		saveError(L"%s:%d SubscribeCharacteristicAsync catch: %s", __WFILE__, __LINE__, ex.message().c_str());
 	}
 	subscribeQueueSignal.notify_one();
 }
 
-
-int SubscribeCharacteristicIndicate(wchar_t* deviceId, wchar_t* serviceId, wchar_t* characteristicId, bool block) {
+bool SubscribeCharacteristicIndicate(wchar_t* deviceId, wchar_t* serviceId, wchar_t* characteristicId, bool block) {
 	unique_lock<mutex> lock(subscribeQueueLock);
-	int result = 0;
-	//SubscribeCharacteristicAsync(deviceId, serviceId, characteristicId, block ? &result : 0);
-	SubscribeCharacteristicAsyncIndicate(deviceId, serviceId, characteristicId, &result);
-	saveError(L"Finish SubscribeCharacteristicAsync2");
-
-	if (block && QuittableWait(subscribeQueueSignal, lock)) {
-		saveError(L"after QuittableWait");
-
-		return 1;
-	}
-
+	bool result = false;
+	SubscribeCharacteristicAsyncIndicate(deviceId, serviceId, characteristicId, block ? &result : 0);
+	if (block && QuittableWait(subscribeQueueSignal, lock))
+		return false;
 
 	return result;
 }
@@ -651,7 +667,8 @@ void Quit() {
 		lock_guard lock(dataQueueLock);
 		dataQueue = {};
 	}
-	for (auto device : cache) {
+	for 
+		(auto device : cache) {
 		device.second.device.Close();
 		for (auto service : device.second.services) {
 			service.second.service.Close();
@@ -663,4 +680,17 @@ void Quit() {
 void GetError(ErrorMessage* buf) {
 	lock_guard error_lock(errorLock);
 	wcscpy_s(buf->msg, last_error);
+}
+
+void Disconnect(wchar_t* deviceId) {
+	for (auto device : cache) {
+		if (hsh(deviceId) == device.first) {
+			device.second.device.Close();
+			for (auto service : device.second.services) {
+				service.second.service.Close();
+			}
+			cache.erase(hsh(deviceId));
+			return;
+		}
+	}
 }

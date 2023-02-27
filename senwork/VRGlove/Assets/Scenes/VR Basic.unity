@@ -104,7 +104,7 @@ NavMeshSettings:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_BuildSettings:
-    serializedVersion: 3
+    serializedVersion: 2
     agentTypeID: 0
     agentRadius: 0.5
     agentHeight: 2
@@ -117,7 +117,7 @@ NavMeshSettings:
     cellSize: 0.16666667
     manualTileSize: 0
     tileSize: 256
-    buildHeightMesh: 0
+    accuratePlacement: 0
     maxJobWorkers: 0
     preserveTilesOutsideBounds: 0
     debug:
@@ -128,7 +128,6 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 4837130161846771872, guid: b2020dfc96f9f456c8ee6811e788cf15, type: 3}
@@ -233,15 +232,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4837130161846771884, guid: b2020dfc96f9f456c8ee6811e788cf15, type: 3}
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4837130161915754119, guid: b2020dfc96f9f456c8ee6811e788cf15, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1823801321}
-    - targetCorrespondingSourceObject: {fileID: 4837130161846771872, guid: b2020dfc96f9f456c8ee6811e788cf15, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 704444831}
   m_SourcePrefab: {fileID: 100100000, guid: b2020dfc96f9f456c8ee6811e788cf15, type: 3}
 --- !u!1 &122050328
 GameObject:
@@ -274,7 +264,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2143271754}
-  m_RootOrder: -1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -353,7 +343,7 @@ RectTransform:
   m_Children:
   - {fileID: 1762238132}
   m_Father: {fileID: 1560071355}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -437,7 +427,6 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
-  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -472,7 +461,6 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 619e34bf89f944823b530a1315c16d08, type: 3}
@@ -544,21 +532,6 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 619e34bf89f944823b530a1315c16d08, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 996575834}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 619e34bf89f944823b530a1315c16d08, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 996575835}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 619e34bf89f944823b530a1315c16d08, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 996575828}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 619e34bf89f944823b530a1315c16d08, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 996575831}
   m_SourcePrefab: {fileID: 100100000, guid: 619e34bf89f944823b530a1315c16d08, type: 3}
 --- !u!1 &323693991
 GameObject:
@@ -740,7 +713,7 @@ RectTransform:
   m_Children:
   - {fileID: 1257557298}
   m_Father: {fileID: 827645583}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1149,7 +1122,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2143271754}
-  m_RootOrder: -1
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
@@ -1688,7 +1661,7 @@ RectTransform:
   - {fileID: 366879936}
   - {fileID: 1560071355}
   m_Father: {fileID: 995998856}
-  m_RootOrder: -1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -1794,7 +1767,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 995998856}
-  m_RootOrder: -1
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
@@ -1942,7 +1915,7 @@ RectTransform:
   - {fileID: 859004447}
   - {fileID: 827645583}
   m_Father: {fileID: 157195803}
-  m_RootOrder: -1
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2003,8 +1976,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1475565809}
-        m_TargetAssemblyTypeName: BleCntrlWinrt, Assembly-CSharp
+      - m_Target: {fileID: 2011324048}
+        m_TargetAssemblyTypeName: BLECntrlWinrt, Assembly-CSharp
         m_MethodName: OnDropdownValueSelected
         m_Mode: 1
         m_Arguments:
@@ -2095,21 +2068,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 996575825}
-  serializedVersion: 4
+  serializedVersion: 2
   m_Mass: 100
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -2123,18 +2085,10 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 996575825}
   m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
   m_IsTrigger: 0
-  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  serializedVersion: 2
+  m_Size: {x: 2, y: 2, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1167865436
 GameObject:
@@ -2167,7 +2121,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2143271754}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -2288,7 +2242,7 @@ RectTransform:
   m_Children:
   - {fileID: 2143271754}
   m_Father: {fileID: 366879936}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -2311,7 +2265,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1475565808
 Transform:
   m_ObjectHideFlags: 0
@@ -2374,7 +2328,7 @@ RectTransform:
   m_Children:
   - {fileID: 142471986}
   m_Father: {fileID: 827645583}
-  m_RootOrder: -1
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -2499,7 +2453,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 995998856}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -2579,7 +2533,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 142471986}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.2}
@@ -2651,17 +2605,9 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1797146342}
   m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
   m_IsTrigger: 0
-  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
+  serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
@@ -2912,6 +2858,7 @@ GameObject:
   - component: {fileID: 2011324046}
   - component: {fileID: 2011324045}
   - component: {fileID: 2011324044}
+  - component: {fileID: 2011324048}
   m_Layer: 5
   m_Name: ConnectButton
   m_TagString: Untagged
@@ -2952,8 +2899,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f3a3182c17b847c19df8a88ca9f3d5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetMac: {fileID: 0}
-  targetWin: {fileID: 0}
   bleCntrlWinrt: {fileID: 0}
 --- !u!114 &2011324045
 MonoBehaviour:
@@ -3049,6 +2994,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2011324042}
   m_CullTransparentMesh: 1
+--- !u!114 &2011324048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2011324042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63081110fbb435c4386eb342ef189969, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bleDD: {fileID: 995998857}
+  hand: {fileID: 996575825}
 --- !u!1 &2143271753
 GameObject:
   m_ObjectHideFlags: 0
@@ -3082,7 +3041,7 @@ RectTransform:
   - {fileID: 580894022}
   - {fileID: 122050329}
   m_Father: {fileID: 1257557298}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
@@ -3142,7 +3101,6 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 5673540781885071428, guid: 9ca02f463e4b7461daf4fbe44b9a5a9a, type: 3}
@@ -3198,7 +3156,4 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9ca02f463e4b7461daf4fbe44b9a5a9a, type: 3}

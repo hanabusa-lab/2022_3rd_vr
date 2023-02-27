@@ -5,7 +5,7 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BleCntrlWinrt : MonoBehaviour
+public class BLECntrlWinrt : MonoBehaviour
 {
     //bleSelectionDropDown
     [SerializeField] public Dropdown bleDD;
@@ -21,15 +21,13 @@ public class BleCntrlWinrt : MonoBehaviour
     BLE.BLEScan scan;
     bool isScanning = false, isConnected = false;
     string deviceId = null;  
-    IDictionary discoveredDevices = new Dictionary<string, string>();
+    IDictionary foundDevices = new Dictionary<string, string>();
     int devicesCount = 0;
 
     // BLE Threads 
     Thread scanningThread, connectionThread, readingThread;
 
     // GUI elements
-    //private Text TextDiscoveredDevices, TextIsScanning, TextTargetDeviceConnection, TextTargetDeviceData;
-    //private Button ButtonEstablishConnection, ButtonStartScan;
     int remoteAngle, lastRemoteAngle;
     bool readThreadFg;
     String receiveCmd;
@@ -46,8 +44,9 @@ public class BleCntrlWinrt : MonoBehaviour
         ble = new BLE();
         //ButtonEstablishConnection.enabled = false;
         //TextTargetDeviceConnection.text = targetDeviceName + " not found.";
-        readingThread = new Thread(ReadBleData);
-        readThreadFg = false;
+        //readingThread = new Thread(ReadBleData);
+        //readThreadFg = false;
+        CleanUp();
      }
 
 
@@ -67,27 +66,24 @@ public class BleCntrlWinrt : MonoBehaviour
     // Update is called once per frame
     void Update()
     {  
-        //Debug.Log("dicrcount="+discoveredDevices.Count+" devcount="+ devicesCount);
+        //Debug.Log("dicrcount="+foundDevices.Count+" devcount="+ devicesCount);
                     
-        //セレクションを更新する
-        if (discoveredDevices.Count > devicesCount){
-            devicesCount = discoveredDevices.Count;
-            foreach(String value in discoveredDevices.Values){
-                Debug.Log("list micro:bit="+value);
+        //bleDDに項目を追加する。
+        if (foundDevices.Count > devicesCount){
+            Debug.Log("dicrcount="+foundDevices.Count+" devcount="+ devicesCount);
+       
+            devicesCount = foundDevices.Count;
+            foreach(String value in foundDevices.Values){
+                Debug.Log("list add micro:bit="+value);
                 Dropdown.OptionData optionData = new Dropdown.OptionData(value);
                 bleDD.options.Add(optionData);
             }
-            //KeyValuePair<string, string> deviceName =  discoveredDevices[discoveredDevices.Count];
-            //String deviceName =  discoveredDevices(x => x.Key).Last();
-            //Debug.Log("deviceName2="+deviceName.Value);
-            //Dropdown.OptionData optionData = new Dropdown.OptionData(deviceName);
-            //bleDD.options.Add(optionData);
         }
 
-        //connection threadが有効な際に受信を行う
-        //Debug.Log("ble connect="+ble.isConnected+" readingThread="+readingThread.IsAlive);
-        if(ble.isConnected && !readingThread.IsAlive){
+        //if(ble.isConnected && readingThread==null !readingThread.IsAlive){
+        if(ble.isConnected && readingThread==null){  
             Debug.Log("start readingThread");
+            readThreadFg = true;
             readingThread = new Thread(ReadBleData);
             readingThread.Start();
         }
@@ -114,30 +110,6 @@ public class BleCntrlWinrt : MonoBehaviour
             }
         }
 
-        /*
-        if (isScanning)
-        {
-            //if (ButtonStartScan.enabled)
-            //    ButtonStartScan.enabled = false;
-
-            if (discoveredDevices.Count > devicesCount)
-            {
-                //UpdateGuiText("scan");
-                devicesCount = discoveredDevices.Count;
-            }                
-        } else
-        {
-             Restart scan in same play session not supported yet.
-            if (!ButtonStartScan.enabled)
-                ButtonStartScan.enabled = true;
-            
-            if (TextIsScanning.text != "Not scanning.")
-            {
-                TextIsScanning.color = Color.white;
-                TextIsScanning.text = "Not scanning.";
-            }
-        }*/
-
         // The target device was found.
         if (deviceId != null && deviceId != "-1")
         {
@@ -150,7 +122,7 @@ public class BleCntrlWinrt : MonoBehaviour
             else if (ble.isConnected && !isConnected)
             {
                 //UpdateGuiText("connected");
-                isConnected = true;
+                //isConnected = true;
             // Device was found, but not connected yet. 
             } 
             /*else if (!ButtonEstablishConnection.enabled && !isConnected)
@@ -160,34 +132,28 @@ public class BleCntrlWinrt : MonoBehaviour
             } */
             
         } 
-
-        //update data
-        //TextTargetDeviceData.text = receiveCmd;
     }
 
-    private void OnDestroy()
-    {
-        CleanUp();
-        Debug.Log("Exec CleanUp\n");
-    }
-
-    private void OnApplicationQuit()
-    {
-        CleanUp();
-        Debug.Log("Exec CleanUp\n");
-    }
-
+ 
     //Scanの開始。Connectボタンが押された際に実行する
     public void StartScanHandler()
     {
+        Debug.Log("StartScanHander");
         devicesCount = 0;
         isScanning = true;
-        discoveredDevices.Clear();
+        foundDevices.Clear();
+        //if(scan!=null){
+        //    scan.Cancel();
+        //}
+        //if(scanningThread!=null){
+        //    scanningThread.Abort();
+        //}
+
         scanningThread = new Thread(ScanBleDevices);
         scanningThread.Start();
         //TextIsScanning.color = new Color(244, 180, 26);
         //TextIsScanning.text = "Scanning...";
-        //TextDiscoveredDevices.text = "";
+        //TextfoundDevices.text = "";
     }
 
     //接続の有無を確認する
@@ -195,46 +161,88 @@ public class BleCntrlWinrt : MonoBehaviour
         return isConnected; 
     }
 
-    // Prevent threading issues and free BLE stack.
-    // Can cause Unity to freeze and lead
-    // to errors when omitted.
-    private void CleanUp()
-    {
-        try
-        {
-            scan.Cancel();
-            ble.Close();
-            scanningThread.Abort();
-            connectionThread.Abort();
-            readingThread.Abort();
-        } catch(NullReferenceException e)
-        {
-            Debug.Log("Thread or object never initialized.\n" + e);
-        }        
+    public bool IsScanning(){
+        return isScanning; 
     }
 
-    //切断処理
-    public void Disconnect(){
-        ResetHandler();
-    }
-
-    private void ResetHandler()
+    void ScanBleDevices()
     {
-        readThreadFg=false;
-        //TextTargetDeviceData.text = "";
-        //TextTargetDeviceConnection.text = targetDeviceName + " not found.";
-        // Reset previous discovered devices
-        discoveredDevices.Clear();
-        //TextDiscoveredDevices.text = "No devices.";
+        //clear bleDD list
+        //bleDD = GetComponent<Dropdown>();
+        //bleDD.ClearOptions();
         deviceId = null;
-        CleanUp();
+
+        scan = BLE.ScanDevices();
+        Debug.Log("BLE.ScanDevices() started.");
+        scan.Found = (_deviceId, deviceName) =>
+        {
+            Debug.Log("found device with name: " + deviceName);
+            //add device if device contain micro:bit
+            if(deviceName!="" && deviceName.Contains("micro:bit")){
+                //discoverDeviceに項目がない場合に追加する。
+                //if(!foundDevices.Contains(_deviceId)){
+                if(!foundDevices.Contains(_deviceId)){
+                    foundDevices.Add(_deviceId, deviceName);
+                    Debug.Log("add foundDevices micro:bit" + deviceName);
+                }
+            }
+            //if (deviceId == null && deviceName == targetDeviceName)
+            //    deviceId = _deviceId;
+        };
+
+        scan.Finished = () =>
+        {
+            isScanning = false;
+            Debug.Log("scan finished");
+            if (deviceId == null)
+                deviceId = "-1";
+        };
+        while (deviceId == null)
+            Thread.Sleep(500);
+        scan.Cancel();
+        scanningThread = null;
+        isScanning = false;
+
+        /*if (deviceId == "-1")
+        {
+            Debug.Log("no device found!");
+            return;
+        }*/
+    }
+
+    // Start establish BLE connection with
+    // target device in dedicated thread.
+    public void StartConHandler()
+    {
+        connectionThread = new Thread(ConnectBleDevice);
+        connectionThread.Start();
+    }
+
+    private void ConnectBleDevice()
+    {
+        Debug.Log("Start Connecting to: " + targetDeviceName);
+
+        if (deviceId != null)
+        {
+            try
+            {
+                ble.Connect(deviceId,
+                serviceUuid,
+                characteristicUuids);
+            } catch(Exception e)
+            {
+                Debug.Log("Could not establish connection to device with ID " + deviceId + "\n" + e);
+            }
+        }
+        if (ble.isConnected){
+            Debug.Log("Connected to: " + targetDeviceName);
+        }
     }
 
     private void ReadBleData(object obj)
     {
         //while(readThreadFg){
-        bool fg=true;
-        while(fg){
+        while(readThreadFg){
         byte[] packageReceived = BLE.ReadBytes();
         //BLE.ReadPackage();
         // Convert little Endian.
@@ -263,92 +271,6 @@ public class BleCntrlWinrt : MonoBehaviour
         }*/
 
     }
-
-    void UpdateGuiText(string action)
-    {
-        switch(action) {
-            case "scan":
-                //TextDiscoveredDevices.text = "";
-                foreach (KeyValuePair<string, string> entry in discoveredDevices)
-                {
-                    //TextDiscoveredDevices.text += "DeviceID: " + entry.Key + "\nDeviceName: " + entry.Value + "\n\n";
-                    Debug.Log("Added device: " + entry.Key);
-                }
-                break;
-            case "connected":
-                //ButtonEstablishConnection.enabled = false;
-                //TextTargetDeviceConnection.text = "Connected to target device:\n" + targetDeviceName;
-                break;
-            case "writeData":
-                if (!readingThread.IsAlive)
-                //if (!readThreadFg)
-                {
-                    Debug.Log("start readingThread");
-                    readThreadFg = true;
-                    readingThread = new Thread(ReadBleData);
-                    readingThread.Start();
-                }
-                if (remoteAngle != lastRemoteAngle)
-                {
-                    //TextTargetDeviceData.text = "Remote angle: " + remoteAngle;
-                    lastRemoteAngle = remoteAngle;
-                }
-                break;
-        }
-    }
-
-    void ScanBleDevices()
-    {
-        //clear bleDD list
-        //bleDD = GetComponent<Dropdown>();
-        //bleDD.ClearOptions();
-
-        scan = BLE.ScanDevices();
-        Debug.Log("BLE.ScanDevices() started.");
-        scan.Found = (_deviceId, deviceName) =>
-        {
-            Debug.Log("found device with name: " + deviceName);
-            //add device if device contain micro:bit
-            if(deviceName!="" && deviceName.Contains("micro:bit")){
-                //discoverDeviceに項目がない場合に追加する。
-                //if(!discoveredDevices.Contains(_deviceId)){
-                    if(!discoveredDevices.Contains(_deviceId)){
-                        discoveredDevices.Add(_deviceId, deviceName);
-                        Debug.Log("found micro:bit" + deviceName);
-                    }
-            }
-            //if (deviceId == null && deviceName == targetDeviceName)
-            //    deviceId = _deviceId;
-        };
-
-        scan.Finished = () =>
-        {
-            isScanning = false;
-            Debug.Log("scan finished");
-            if (deviceId == null)
-                deviceId = "-1";
-        };
-        while (deviceId == null)
-            Thread.Sleep(500);
-        scan.Cancel();
-        scanningThread = null;
-        isScanning = false;
-
-        if (deviceId == "-1")
-        {
-            Debug.Log("no device found!");
-            return;
-        }
-    }
-
-    // Start establish BLE connection with
-    // target device in dedicated thread.
-    public void StartConHandler()
-    {
-        connectionThread = new Thread(ConnectBleDevice);
-        connectionThread.Start();
-    }
-
     
     //ドロップダウンが選択された際に実行される。
     public void OnDropdownValueSelected(){
@@ -357,9 +279,9 @@ public class BleCntrlWinrt : MonoBehaviour
 
         //deviceIDの取得
         deviceId = null;
-        //foreach (var entry in discoveredDevices){
-        foreach (string key in discoveredDevices.Keys){
-            if(discoveredDevices[key]==deviceName){
+        //foreach (var entry in foundDevices){
+        foreach (string key in foundDevices.Keys){
+            if(foundDevices[key]==deviceName){
                 deviceId = key;
                 Debug.Log("selected "+deviceId+" name="+deviceName);
 
@@ -371,25 +293,7 @@ public class BleCntrlWinrt : MonoBehaviour
         }
     }
 
-    private void ConnectBleDevice()
-    {
-        Debug.Log("Start Connecting to: " + targetDeviceName);
-
-        if (deviceId != null)
-        {
-            try
-            {
-                ble.Connect(deviceId,
-                serviceUuid,
-                characteristicUuids);
-            } catch(Exception e)
-            {
-                Debug.Log("Could not establish connection to device with ID " + deviceId + "\n" + e);
-            }
-        }
-        if (ble.isConnected)
-            Debug.Log("Connected to: " + targetDeviceName);
-    }
+    
 
     /*ulong ConvertLittleEndian(byte[] array)
     {
@@ -402,4 +306,69 @@ public class BleCntrlWinrt : MonoBehaviour
         }
         return result;
     }*/
+
+    // Prevent threading issues and free BLE stack.
+    // Can cause Unity to freeze and lead
+    // to errors when omitted.
+    private void CleanUp()
+    {
+        try
+        {
+            scan.Cancel();
+            ble.Close();
+        
+            if(scanningThread!=null){
+                scanningThread.Abort();
+                scanningThread=null;
+            }
+            if(connectionThread!=null){
+                connectionThread.Abort();
+                connectionThread=null;
+            }
+
+            readThreadFg=false;
+            if(readingThread!=null){
+                readingThread.Abort();
+                readingThread = null;
+            }
+
+            foundDevices.Clear();
+            deviceId = null;
+
+          
+        } catch(NullReferenceException e)
+        {
+            Debug.Log("Thread or object never initialized.\n" + e);
+        }        
+    }
+
+    //切断処理
+    public void Disconnect(){
+         CleanUp();
+    }
+
+    /*private void ResetHandler()
+    {
+        //readThreadFg=false;
+        //TextTargetDeviceData.text = "";
+        //TextTargetDeviceConnection.text = targetDeviceName + " not found.";
+        // Reset previous discovered devices
+        foundDevices.Clear();
+        //TextfoundDevices.text = "No devices.";
+        deviceId = null;
+        CleanUp();
+    }*/
+    
+    private void OnDestroy()
+    {
+        CleanUp();
+        Debug.Log("Exec CleanUp OnDestroy\n");
+    }
+
+    private void OnApplicationQuit()
+    {
+        CleanUp();
+        Debug.Log("Exec CleanUp OnApplication \n");
+    }
+
 }

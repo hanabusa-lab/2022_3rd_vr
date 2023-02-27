@@ -10,7 +10,7 @@ using UnityEngine.UI;
 using System;
 using System.Text;
 
-public class BLEDebugMAC : MonoBehaviour
+public class BLECntrlMac : MonoBehaviour
 {
     public string DeviceName = "BBC micro:bit [zovog]";
     public string ServiceUUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
