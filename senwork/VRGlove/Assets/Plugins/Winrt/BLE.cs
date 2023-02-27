@@ -17,6 +17,12 @@ public class BLE
         {
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
             public string id;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 18)]
+            public string mac;
+            [MarshalAs(UnmanagedType.I1)]
+            public bool isConnected;
+            [MarshalAs(UnmanagedType.I1)]
+            public bool isConnectedUpdated;
             [MarshalAs(UnmanagedType.I1)]
             public bool isConnectable;
             [MarshalAs(UnmanagedType.I1)]
@@ -25,6 +31,10 @@ public class BLE
             public string name;
             [MarshalAs(UnmanagedType.I1)]
             public bool nameUpdated;
+            [MarshalAs(UnmanagedType.I4)]
+            public int signalStrength;
+            [MarshalAs(UnmanagedType.I1)]
+            public bool hasSignalStrength;
         }
 
         [DllImport("BleWinrtDll.dll", EntryPoint = "StartDeviceScan")]
@@ -65,10 +75,10 @@ public class BLE
         public static extern ScanStatus PollCharacteristic(out Characteristic characteristic, bool block);
 
         [DllImport("BleWinrtDll.dll", EntryPoint = "SubscribeCharacteristic", CharSet = CharSet.Unicode)]
-        public static extern bool SubscribeCharacteristic(string deviceId, string serviceId, string characteristicId);
+        public static extern bool SubscribeCharacteristic(string deviceId, string serviceId, string characteristicId, bool block);
 
-          [DllImport("BleWinrtDll.dll", EntryPoint = "SubscribeCharacteristicIndicate", CharSet = CharSet.Unicode)]
-        public static extern bool SubscribeCharacteristicIndicate(string deviceId, string serviceId, string characteristicId);
+        [DllImport("BleWinrtDll.dll", EntryPoint = "SubscribeCharacteristicIndicate", CharSet = CharSet.Unicode)]
+        public static extern bool SubscribeCharacteristicIndicate(string deviceId, string serviceId, string characteristicId, bool block);
 
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
@@ -90,7 +100,7 @@ public class BLE
         public static extern bool PollData(out BLEData data, bool block);
 
         [DllImport("BleWinrtDll.dll", EntryPoint = "SendData")]
-        public static extern bool SendData(BLEData data);
+        public static extern bool SendData(in BLEData data, bool block);
 
         [DllImport("BleWinrtDll.dll", EntryPoint = "Quit")]
         public static extern void Quit();
@@ -104,6 +114,9 @@ public class BLE
 
         [DllImport("BleWinrtDll.dll", EntryPoint = "GetError")]
         public static extern void GetError(out ErrorMessage buf);
+
+        [DllImport("BleWinrtDll.dll", EntryPoint = "Disconnect", CharSet = CharSet.Unicode)]
+        public static extern void Disconnect(string deviceId);
     }
 
     public static Thread scanThread;
@@ -123,6 +136,11 @@ public class BLE
             cancelled = true;
             Impl.StopDeviceScan();
         }
+
+        public void Init()
+        {
+            cancelled = false;
+        }
     }
 
     // don't block the thread in the Found or Finished callback; it would disturb cancelling the scan
@@ -136,28 +154,55 @@ public class BLE
         currentScan.Finished = null;
         scanThread = new Thread(() =>
         {
-            Impl.StartDeviceScan();
-            Impl.DeviceUpdate res = new Impl.DeviceUpdate();
-            List<string> deviceIds = new List<string>();
-            Dictionary<string, string> deviceNames = new Dictionary<string, string>();
-            //Impl.ScanStatus status;
-            while (Impl.PollDevice(out res, true) != Impl.ScanStatus.FINISHED)
+        Console.WriteLine("Start StartDeviceScan()");
+        Impl.StartDeviceScan();
+        Console.WriteLine("StartDeviceSca result=" + GetError());
+        Impl.DeviceUpdate res = new Impl.DeviceUpdate();
+        List<string> deviceIds = new List<string>();
+        Dictionary<string, string> deviceMac = new Dictionary<string, string>();
+        Dictionary<string, string> deviceName = new Dictionary<string, string>();
+        Dictionary<string, bool> deviceIsConnectable = new Dictionary<string, bool>();
+        Console.WriteLine("ScanThreadStart ImplScanStatus=" + Impl.ScanStatus.FINISHED);
+        Impl.ScanStatus status;
+         //currentScanの値を初期化する。
+         currentScan.Init();
+
+            //while (Impl.PollDevice(out res, true) != Impl.ScanStatus.FINISHED)
+            while (true)
             {
-                if (res.nameUpdated)
+                status = Impl.PollDevice(out res, true);
+                Console.WriteLine("Poll ScanStatus=" + status+" geterrro="+ GetError());
+                if(status== Impl.ScanStatus.FINISHED)
                 {
-                    string devicename = null;
-                    //同じ名前があったら追加しない
-                    if(!deviceNames.ContainsKey(res.id)){
-                        deviceNames.Add(res.id, res.name);
-                        deviceIds.Add(res.id);                    
-                    }
-                }
-                // connectable device
-                if (deviceIds.Contains(res.id) && res.isConnectable)
-                    currentScan.Found?.Invoke(res.id, deviceNames[res.id]);
-                // check if scan was cancelled in callback
-                if (currentScan.cancelled)
                     break;
+                }
+
+                if (!deviceIds.Contains(res.id))
+                {
+                    deviceIds.Add(res.id);
+                    deviceName[res.id] = "";
+                    deviceIsConnectable[res.id] = false;
+                    deviceMac[res.id] = res.mac;
+                }
+                else
+                {
+                    res.mac = deviceMac[res.id];
+                }
+
+                if (res.nameUpdated)
+                    deviceName[res.id] = res.name;
+                if (res.isConnectableUpdated)
+                    deviceIsConnectable[res.id] = res.isConnectable;
+                // connectable device
+                if (deviceName[res.id] != "" && deviceIsConnectable[res.id] == true)
+                    currentScan.Found?.Invoke(res.id, deviceName[res.id]);
+                // check if scan was cancelled in callback
+                if (currentScan.cancelled) {
+                    Console.WriteLine("currentScan.canceled=" + currentScan.cancelled);
+                    break;
+                }
+
+                Console.WriteLine(res.mac + " " + (res.hasSignalStrength ? res.signalStrength.ToString() : "(no rssi)"));
             }
             currentScan.Finished?.Invoke();
             scanThread = null;
@@ -180,11 +225,13 @@ public class BLE
             Debug.Log("characteristic found: " + c.uuid + ", user description: " + c.userDescription);
     }
 
-    public static bool Subscribe(string deviceId, string serviceUuids, string[] characteristicUuids)
+    public static bool Subscribe(string deviceId, string serviceUuid, string[] characteristicUuids)
     {
         foreach (string characteristicUuid in characteristicUuids)
         {
-            bool res = Impl.SubscribeCharacteristicIndicate(deviceId, serviceUuids, characteristicUuid);
+            //bool res = Impl.SubscribeCharacteristicIndicate(deviceId, serviceUuid, characteristicUuid, true);
+            bool res = Impl.SubscribeCharacteristicIndicate(deviceId, serviceUuid, characteristicUuid, true);
+
             if (!res)
                 return false;
         }
@@ -215,22 +262,21 @@ public class BLE
         packageSend.deviceId = deviceId;
         packageSend.serviceUuid = serviceUuid;
         packageSend.characteristicUuid = characteristicUuid;
-        return Impl.SendData(packageSend);
+        for (int i = 0; i < data.Length; i++)
+            packageSend.buf[i] = data[i];
+        return Impl.SendData(in packageSend, true);
     }
 
     public static void ReadPackage()
     {
         Impl.BLEData packageReceived;
-        //Debug.Log("start poll");
         bool result = Impl.PollData(out packageReceived, true);
-        //Debug.Log("end poll");
-     
         if (result)
         {
             if (packageReceived.size > 512)
-                throw new ArgumentOutOfRangeException("Please keep your ble package at a size of maximum 512, cf. spec!\n"
+                throw new ArgumentOutOfRangeException("Please keep your ble package at a size of maximum 512, cf. spec!\n" 
                     + "This is to prevent package splitting and minimize latency.");
-            Debug.Log("received package from characteristic: " + packageReceived.characteristicUuid
+            Debug.Log("received package from characteristic: " + packageReceived.characteristicUuid 
                 + " and size " + packageReceived.size + " use packageReceived.buf to access the data.");
         }
     }
@@ -238,23 +284,18 @@ public class BLE
     public static byte[] ReadBytes()
     {
         Impl.BLEData packageReceived;
-        //Debug.Log("start poll");
-        //bool result = Impl.PollData(out packageReceived, true);
         bool result = Impl.PollData(out packageReceived, true);
-         //Debug.Log("end poll");
-       
         if (result)
         {
-            //Debug.Log("Size: " + packageReceived.size);
-            //Debug.Log("From: " + packageReceived.deviceId);
-
             if (packageReceived.size > 512)
-                throw new ArgumentOutOfRangeException("Package too large.");
+                throw new ArgumentOutOfRangeException("Please keep your ble package at a size of maximum 512, cf. spec!\n" 
+                    + "This is to prevent package splitting and minimize latency.");
+            Debug.Log("received package from characteristic: " + packageReceived.characteristicUuid 
+                + " and size " + packageReceived.size + " use packageReceived.buf to access the data.");
 
             return packageReceived.buf;
-        } else
-        {
-            return new byte[] { 0x0 };
+        }{
+            return new byte[] {0x00};
         }
     }
 
@@ -263,6 +304,13 @@ public class BLE
         Impl.Quit();
         isConnected = false;
     }
+
+    public void Disconnect(string deviceId)
+    {
+        Impl.Disconnect(deviceId);
+        isConnected = false;
+    }
+
 
     public static string GetError()
     {

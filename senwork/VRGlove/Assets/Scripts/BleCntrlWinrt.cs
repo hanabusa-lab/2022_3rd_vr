@@ -42,11 +42,6 @@ public class BLECntrlWinrt : MonoBehaviour
         receiveCmd=null;
 
         ble = new BLE();
-        //ButtonEstablishConnection.enabled = false;
-        //TextTargetDeviceConnection.text = targetDeviceName + " not found.";
-        //readingThread = new Thread(ReadBleData);
-        //readThreadFg = false;
-        CleanUp();
      }
 
 
@@ -68,7 +63,7 @@ public class BLECntrlWinrt : MonoBehaviour
     {  
         //Debug.Log("dicrcount="+foundDevices.Count+" devcount="+ devicesCount);
                     
-        //bleDDに項目を追加する。
+        //Scanc中にmicro:bitを見つけたらbleDDに項目を追加する。
         if (foundDevices.Count > devicesCount){
             Debug.Log("dicrcount="+foundDevices.Count+" devcount="+ devicesCount);
        
@@ -81,6 +76,7 @@ public class BLECntrlWinrt : MonoBehaviour
         }
 
         //if(ble.isConnected && readingThread==null !readingThread.IsAlive){
+        //micro:bitとの接続を開始した際
         if(ble.isConnected && readingThread==null){  
             Debug.Log("start readingThread");
             readThreadFg = true;
@@ -109,51 +105,29 @@ public class BLECntrlWinrt : MonoBehaviour
                 }
             }
         }
-
-        // The target device was found.
-        if (deviceId != null && deviceId != "-1")
-        {
-            // Target device is connected and GUI knows.
-            if (ble.isConnected && isConnected)
-            {
-                //UpdateGuiText("writeData");
-            }
-            // Target device is connected, but GUI hasn't updated yet.
-            else if (ble.isConnected && !isConnected)
-            {
-                //UpdateGuiText("connected");
-                //isConnected = true;
-            // Device was found, but not connected yet. 
-            } 
-            /*else if (!ButtonEstablishConnection.enabled && !isConnected)
-            {
-                ButtonEstablishConnection.enabled = true;
-                TextTargetDeviceConnection.text = "Found target device:\n" + targetDeviceName;
-            } */
-            
-        } 
     }
 
- 
     //Scanの開始。Connectボタンが押された際に実行する
     public void StartScanHandler()
     {
+        //clear bleDD list
+        bleDD.ClearOptions();
+        Dropdown.OptionData optionData = new Dropdown.OptionData("micro:bit");
+        bleDD.options.Add(optionData);
+
         Debug.Log("StartScanHander");
         devicesCount = 0;
         isScanning = true;
         foundDevices.Clear();
-        //if(scan!=null){
-        //    scan.Cancel();
-        //}
-        //if(scanningThread!=null){
-        //    scanningThread.Abort();
-        //}
+        if(scan!=null){
+            scan.Cancel();
+        }
+        if(scanningThread!=null){
+            scanningThread.Abort();
+        }
 
         scanningThread = new Thread(ScanBleDevices);
         scanningThread.Start();
-        //TextIsScanning.color = new Color(244, 180, 26);
-        //TextIsScanning.text = "Scanning...";
-        //TextfoundDevices.text = "";
     }
 
     //接続の有無を確認する
@@ -167,9 +141,6 @@ public class BLECntrlWinrt : MonoBehaviour
 
     void ScanBleDevices()
     {
-        //clear bleDD list
-        //bleDD = GetComponent<Dropdown>();
-        //bleDD.ClearOptions();
         deviceId = null;
 
         scan = BLE.ScanDevices();
@@ -186,8 +157,6 @@ public class BLECntrlWinrt : MonoBehaviour
                     Debug.Log("add foundDevices micro:bit" + deviceName);
                 }
             }
-            //if (deviceId == null && deviceName == targetDeviceName)
-            //    deviceId = _deviceId;
         };
 
         scan.Finished = () =>
@@ -202,12 +171,6 @@ public class BLECntrlWinrt : MonoBehaviour
         scan.Cancel();
         scanningThread = null;
         isScanning = false;
-
-        /*if (deviceId == "-1")
-        {
-            Debug.Log("no device found!");
-            return;
-        }*/
     }
 
     // Start establish BLE connection with
@@ -244,32 +207,10 @@ public class BLECntrlWinrt : MonoBehaviour
         //while(readThreadFg){
         while(readThreadFg){
         byte[] packageReceived = BLE.ReadBytes();
-        //BLE.ReadPackage();
-        // Convert little Endian.
-        // In this example we're interested about an angle
-        // value on the first field of our package.
-        //remoteAngle = packageReceived[0];
-         string rcmd = System.Text.Encoding.ASCII.GetString(packageReceived);
-            Debug.Log("packageReceived" + rcmd);
-            //TextTargetDeviceData.text = rcmd;
+        string rcmd = System.Text.Encoding.ASCII.GetString(packageReceived);
+            //Debug.Log("packageReceived" + rcmd);
             receiveCmd = rcmd;
         }
-        //Debug.Log("Angle: " + remoteAngle);
-        //TextTargetDeviceData.text = remoteAngle.ToString(); 
-        //Debug.Log("get data");
-        //Thread.Sleep(10);
-        //}
-        /*BLE.Impl.BLEData res = new BLE.Impl.BLEData();
-        bool fg = true;
-        int cnt = 0;
-        while( fg && BLE.Impl.PollData(out res, true))
-        {
-            string rcmd = System.Text.Encoding.ASCII.GetString(res.buf, 0, res.size);
-            Console.WriteLine("rcmd="+rcmd);
-            cnt++;
-            if (cnt > 50) fg = false;
-        }*/
-
     }
     
     //ドロップダウンが選択された際に実行される。
@@ -293,20 +234,6 @@ public class BLECntrlWinrt : MonoBehaviour
         }
     }
 
-    
-
-    /*ulong ConvertLittleEndian(byte[] array)
-    {
-        int pos = 0;
-        ulong result = 0;
-        foreach (byte by in array)
-        {
-            result |= ((ulong)by) << pos;
-            pos += 8;
-        }
-        return result;
-    }*/
-
     // Prevent threading issues and free BLE stack.
     // Can cause Unity to freeze and lead
     // to errors when omitted.
@@ -314,6 +241,11 @@ public class BLECntrlWinrt : MonoBehaviour
     {
         try
         {
+            //deviceを切断する
+            if(deviceId != null){
+                ble.Disconnect(deviceId);
+            }
+
             scan.Cancel();
             ble.Close();
         
@@ -347,18 +279,6 @@ public class BLECntrlWinrt : MonoBehaviour
          CleanUp();
     }
 
-    /*private void ResetHandler()
-    {
-        //readThreadFg=false;
-        //TextTargetDeviceData.text = "";
-        //TextTargetDeviceConnection.text = targetDeviceName + " not found.";
-        // Reset previous discovered devices
-        foundDevices.Clear();
-        //TextfoundDevices.text = "No devices.";
-        deviceId = null;
-        CleanUp();
-    }*/
-    
     private void OnDestroy()
     {
         CleanUp();
@@ -370,5 +290,4 @@ public class BLECntrlWinrt : MonoBehaviour
         CleanUp();
         Debug.Log("Exec CleanUp OnApplication \n");
     }
-
 }
