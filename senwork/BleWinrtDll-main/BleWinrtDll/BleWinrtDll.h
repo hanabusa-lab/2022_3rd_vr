@@ -4,10 +4,15 @@
 
 struct DeviceUpdate {
 	wchar_t id[100];
+	wchar_t mac[18];
+	bool isConnected = false;
+	bool isConnectedUpdated = false;
 	bool isConnectable = false;
 	bool isConnectableUpdated = false;
 	wchar_t name[50];
 	bool nameUpdated = false;
+	int32_t signalStrength;
+	bool hasSignalStrength = false;
 };
 
 struct Service {
@@ -51,8 +56,7 @@ extern "C" {
 
 	__declspec(dllexport) bool SubscribeCharacteristic(wchar_t* deviceId, wchar_t* serviceId, wchar_t* characteristicId, bool block);
 
-	__declspec(dllexport) int SubscribeCharacteristicIndicate(wchar_t* deviceId, wchar_t* serviceId, wchar_t* characteristicId, bool block);
-
+	__declspec(dllexport) bool SubscribeCharacteristicIndicate(wchar_t* deviceId, wchar_t* serviceId, wchar_t* characteristicId, bool block);
 
 	__declspec(dllexport) bool PollData(BLEData* data, bool block);
 
@@ -61,4 +65,7 @@ extern "C" {
 	__declspec(dllexport) void Quit();
 
 	__declspec(dllexport) void GetError(ErrorMessage* buf);
+
+	
+	__declspec(dllexport) void Disconnect(wchar_t* deviceId);
 }
