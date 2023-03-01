@@ -35,6 +35,9 @@ public class BLECntrlWinrt : MonoBehaviour
     //handオブジェクト
     public GameObject hand;
 
+    //GloveData 
+    GloveData gloveData;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,21 +45,15 @@ public class BLECntrlWinrt : MonoBehaviour
         receiveCmd=null;
 
         ble = new BLE();
+
+        gloveData = new GloveData();
      }
 
-
     [Serializable]
-    public class GloveAngle
+    public class GloveData
     {
-        public string p;
-        public string r;
-    }
-    
-    [Serializable]
-    public class GloveFingure
-    {
-        public string f1;
-        public string f2;
+        public string dat1;
+        public string dat2;
     }
     // Update is called once per frame
     void Update()
@@ -87,21 +84,26 @@ public class BLECntrlWinrt : MonoBehaviour
         //受信した情報をもとにhandの更新を行う
         if(ble.isConnected && readingThread.IsAlive){
             if(receiveCmd!=null){
+                Debug.Log("receiveCmd="+receiveCmd);
                 string[] cmd = receiveCmd.Split(',');
                 if(cmd[0].Substring(0,1)=="p"){
                                         
-                    GloveAngle angle = new GloveAngle();
-                    angle.p = cmd[0].Substring(2);
-                    angle.r = cmd[1].Substring(2);
-                    string json = JsonUtility.ToJson(angle);
+                    gloveData.dat1 = cmd[0].Substring(2);
+                    gloveData.dat2 = cmd[1].Substring(2);
+                    string json = JsonUtility.ToJson(gloveData);
                     hand.GetComponent<HandCntrl>().OnGloveAngleChanged(json);
                 }
-                if(cmd[0].Substring(0,1)=="f"){
-                    GloveFingure fingure = new GloveFingure();
-                    fingure.f1 = cmd[0].Substring(3);
-                    fingure.f2 = cmd[1].Substring(3);
-                    string json = JsonUtility.ToJson(fingure);
+                else if(cmd[0].Substring(0,1)=="f"){
+                    gloveData.dat1 = cmd[0].Substring(3);
+                    gloveData.dat2 = cmd[1].Substring(3);
+                    string json = JsonUtility.ToJson(gloveData);
                     hand.GetComponent<HandCntrl>().OnGloveFingureChanged(json);
+                }
+                else if(cmd[0].Substring(0,1)=="h"){
+                    gloveData.dat1 = cmd[0].Substring(3);
+                    gloveData.dat2 = cmd[1].Substring(3);
+                    string json = JsonUtility.ToJson(gloveData);
+                    hand.GetComponent<HandCntrl>().OnGloveHandPosChanged(json);
                 }
             }
         }

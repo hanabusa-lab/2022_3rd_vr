@@ -16,6 +16,7 @@ public class BLECntrlMac : MonoBehaviour
     public string ServiceUUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
     public string UARTUUID = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
     public GameObject hand;
+    GloveData gloveData;
    
     enum States
     {
@@ -83,29 +84,25 @@ public class BLECntrlMac : MonoBehaviour
         });
     }
 
+    [Serializable]
+    public class GloveData
+    {
+        public string dat1;
+        public string dat2;
+    }
+
     // Use this for initialization
     void Start()
     {
         hand = GameObject.Find("Hand");
         StartProcess();
+        GloveData gloveData = new GloveData();
+            
     }
 
-    [Serializable]
-    public class GloveAngle
-    {
-        public string p;
-        public string r;
-    }
-    
-    [Serializable]
-    public class GloveFingure
-    {
-        public string f1;
-        public string f2;
-    }
     private void ProcessCmd(byte[] bytes)
     {
-        //値を分解する。p:0,r:0や、f1:0,f2:0
+        //値を分解する。p:0,r:0や、f1:0,f2:0, hx:0,hy:2
                   
         string rcmd =System.Text.Encoding.ASCII.GetString(bytes);
         string[] cmd = rcmd.Split(',');
@@ -113,20 +110,26 @@ public class BLECntrlMac : MonoBehaviour
         
         if(cmd[0].Substring(0,1)=="p"){
                                 
-            GloveAngle angle = new GloveAngle();
-            angle.p = cmd[0].Substring(2);
-            angle.r = cmd[1].Substring(2);
-            string json = JsonUtility.ToJson(angle);
+            //GloveData angle = new GloveData();
+            gloveData.dat1 = cmd[0].Substring(2);
+            gloveData.dat2 = cmd[1].Substring(2);
+            string json = JsonUtility.ToJson(gloveData);
             hand.GetComponent<HandCntrl>().OnGloveAngleChanged(json);
         }
-        if(cmd[0].Substring(0,1)=="f"){
-            GloveFingure fingure = new GloveFingure();
-            fingure.f1 = cmd[0].Substring(3);
-            fingure.f2 = cmd[1].Substring(3);
-            string json = JsonUtility.ToJson(fingure);
+        else if(cmd[0].Substring(0,1)=="f"){
+            //GloveData fingure = new GloveData();
+            gloveData.dat1 = cmd[0].Substring(3);
+            gloveData.dat1 = cmd[1].Substring(3);
+            string json = JsonUtility.ToJson(gloveData);
             hand.GetComponent<HandCntrl>().OnGloveFingureChanged(json);
         }
-
+        else if(cmd[0].Substring(0,1)=="h"){
+            //GloveData hand = new GloveData();
+            gloveData.dat1 = cmd[0].Substring(3);
+            gloveData.dat1 = cmd[1].Substring(3);
+            string json = JsonUtility.ToJson(gloveData);
+            hand.GetComponent<HandCntrl>().OnGloveHandPosChanged(json);
+        }
     }
 
     // Update is called once per frame

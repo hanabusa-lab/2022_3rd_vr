@@ -1399,7 +1399,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Connect
+  m_Text: Scan Start
 --- !u!222 &641266267
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2003,7 +2003,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2011324048}
+      - m_Target: {fileID: 1475565809}
         m_TargetAssemblyTypeName: BLECntrlWinrt, Assembly-CSharp
         m_MethodName: OnDropdownValueSelected
         m_Mode: 1
@@ -2911,10 +2911,9 @@ GameObject:
   - component: {fileID: 2011324047}
   - component: {fileID: 2011324046}
   - component: {fileID: 2011324045}
-  - component: {fileID: 2011324044}
   - component: {fileID: 2011324048}
   m_Layer: 5
-  m_Name: ConnectButton
+  m_Name: ScanButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2941,20 +2940,6 @@ RectTransform:
   m_AnchoredPosition: {x: -280, y: 150}
   m_SizeDelta: {x: 100, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2011324044
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2011324042}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f3a3182c17b847c19df8a88ca9f3d5e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bleCntrlWinrt: {fileID: 0}
-  connectBtn: {fileID: 0}
 --- !u!114 &2011324045
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2999,9 +2984,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1475565809}
-        m_TargetAssemblyTypeName: BleCntrlWinrt, Assembly-CSharp
-        m_MethodName: StartScanHandler
+      - m_Target: {fileID: 2011324048}
+        m_TargetAssemblyTypeName: ScanButtonCntrl, Assembly-CSharp
+        m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3056,13 +3041,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2011324042}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63081110fbb435c4386eb342ef189969, type: 3}
+  m_Script: {fileID: 11500000, guid: 7f3a3182c17b847c19df8a88ca9f3d5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bleDD: {fileID: 995998857}
-  hand: {fileID: 996575825}
+  bleCntrlWinrt: {fileID: 1475565809}
+  connectBtn: {fileID: 2011324042}
 --- !u!1 &2143271753
 GameObject:
   m_ObjectHideFlags: 0

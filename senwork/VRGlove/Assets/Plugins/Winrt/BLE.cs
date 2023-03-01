@@ -290,8 +290,8 @@ public class BLE
             if (packageReceived.size > 512)
                 throw new ArgumentOutOfRangeException("Please keep your ble package at a size of maximum 512, cf. spec!\n" 
                     + "This is to prevent package splitting and minimize latency.");
-            Debug.Log("received package from characteristic: " + packageReceived.characteristicUuid 
-                + " and size " + packageReceived.size + " use packageReceived.buf to access the data.");
+            /*Debug.Log("received package from characteristic: " + packageReceived.characteristicUuid 
+                + " and size " + packageReceived.size + " use packageReceived.buf to access the data.");*/
 
             return packageReceived.buf;
         }{

@@ -50,52 +50,46 @@ public class HandCntrl : MonoBehaviour
         }*/
     }
 
-    //micro:bitからの情報取得
-    [Serializable]
-    public class GloveAngle
+    //micro:bitから取得情報クラス
+     [Serializable]
+    public class GloveData
     {
-        public string p;
-        public string r;
+        public string dat1;
+        public string dat2;
     }
 
-    // micro:bitの加速度計のx軸方向の値を受け取ります
+    //GloveのAngle更新
     public void OnGloveAngleChanged(String json)
     {
-        GloveAngle angle = JsonUtility.FromJson<GloveAngle>(json);
-        Debug.Log(json+" "+angle.p+" "+angle.r);
+        GloveData angle = JsonUtility.FromJson<GloveData>(json);
+        Debug.Log("onGloveAngleChanged json="+json+" value="+angle.dat1+" "+angle.dat1);
 
         //角度回転
         Transform tmpTransform = this.transform;
  
         // ローカル座標を基準に、回転を取得
         Vector3 localAngle = tmpTransform.localEulerAngles;
-        localAngle.x = -1*int.Parse(angle.p)+90.0f; // ローカル座標を基準に、x軸を軸にした回転を10度に変更
-        localAngle.y = -1*int.Parse(angle.r); // ローカル座標を基準に、y軸を軸にした回転を10度に変更
+        localAngle.x = -1*int.Parse(angle.dat1)+90.0f; // ローカル座標を基準に、x軸を軸にした回転を10度に変更
+        localAngle.y = -1*int.Parse(angle.dat2); // ローカル座標を基準に、y軸を軸にした回転を10度に変更
         localAngle.z = 10.0f; // ローカル座標を基準に、z軸を軸にした回転を10度に変更
         tmpTransform.localEulerAngles = localAngle; // 回転角度を設定
  
     }
 
-    [Serializable]
-    public class GloveFingure
-    {
-        public string f1;
-        public string f2;
-    }
-
+    //Gloveの指の更新
     public void OnGloveFingureChanged(String json)
     {
-        GloveFingure fingure = JsonUtility.FromJson<GloveFingure>(json);
-        Debug.Log(json+""+fingure.f1+" "+fingure.f2);
+        GloveData fingure = JsonUtility.FromJson<GloveData>(json);
+        Debug.Log("OnGloveFingureChanged "+json+""+fingure.dat1+" "+fingure.dat2);
 
-        float f1 = Mathf.Abs(int.Parse(fingure.f1));
+        float f1 = Mathf.Abs(int.Parse(fingure.dat1));
         if(f1>90){
             f1=90;
         }
         f1 = f1/90.0f;
         animator.SetFloat("f1",f1);
 
-        float f2 = Mathf.Abs(int.Parse(fingure.f2));
+        float f2 = Mathf.Abs(int.Parse(fingure.dat2));
         if(f2>90){
             f2=90;
         }
@@ -113,5 +107,26 @@ public class HandCntrl : MonoBehaviour
         animator.SetFloat("f4",of);
         animator.SetFloat("f5",of);
     }
+    
+    //GloveのHand位置の更新
+    public void OnGloveHandPosChanged(String json)
+    {
+        GloveData pos = JsonUtility.FromJson<GloveData>(json);
+        Debug.Log("OnGloveHandPosChanged "+json+" "+pos.dat1+" "+pos.dat2);
+
+        //handの位置移動
+        Transform tmpTransform = this.transform;
+        /*
+        Vector3 localAngle = tmpTransform.localEulerAngles;
+        localAngle.x = -1*int.Parse(angle.p)+90.0f; // ローカル座標を基準に、x軸を軸にした回転を10度に変更
+        localAngle.y = -1*int.Parse(angle.r); // ローカル座標を基準に、y軸を軸にした回転を10度に変更
+        localAngle.z = 10.0f; // ローカル座標を基準に、z軸を軸にした回転を10度に変更
+        tmpTransform.localEulerAngles = localAngle; // 回転角度を設定
+        */
+        this.transform.position = new Vector3(int.Parse(pos.dat1)/100.0f, int.Parse(pos.dat2)/100.0f, tmpTransform.position.z);
+ 
+    }
+
+
 
 }
