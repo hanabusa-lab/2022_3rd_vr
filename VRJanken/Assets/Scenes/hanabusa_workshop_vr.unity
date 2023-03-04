@@ -777,7 +777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42a4cef0caa8e134e96eafd5ac09e0b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bleScrollView: {fileID: 0}
+  bleScrollView: {fileID: 1989819607}
   hand: {fileID: 1055626501}
 --- !u!4 &691951846
 Transform:
@@ -3545,7 +3545,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5ce56f29e5482744a83b1599495dff6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bleCntrlWinrt: {fileID: 0}
+  bleCntrlWinrt: {fileID: 691951845}
 --- !u!114 &1989819610
 MonoBehaviour:
   m_ObjectHideFlags: 0
