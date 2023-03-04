@@ -31,7 +31,7 @@ public class ScoreCount : MonoBehaviour
         if (Input.GetKey (KeyCode.V)) {
             jankenHand = 0;
         }
-        gameObject.GetComponent<Renderer>().material = ColorSet[jankenHand];
+        //gameObject.GetComponent<Renderer>().material = ColorSet[jankenHand];
 
     }
  
