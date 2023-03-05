@@ -50,11 +50,13 @@ public class BLEScrollViewCntrl : MonoBehaviour
         var Rect = Contents.AddComponent<RectTransform>();
         Rect.transform.localPosition = new Vector3(0, 0, 0);
         Rect.transform.localScale = new Vector3(1, 1, 1);
-        Rect.sizeDelta = new Vector2(200, 30);
+        Rect.sizeDelta = new Vector2(160, 30);
 
         Contents.AddComponent<CanvasRenderer>();
         Contents.AddComponent<Image>();
         Contents.AddComponent<LayoutElement>().preferredHeight = 30;
+        Contents.AddComponent<LayoutElement>().preferredWidth = 140;
+
 
         var butttonState = Contents.AddComponent<Button>();
 
@@ -72,7 +74,7 @@ public class BLEScrollViewCntrl : MonoBehaviour
         //textChild.color = new Color(255f / 255f, 255f / 255f, 255f / 255f, 255f / 255f);
         textChild.color = new Color(0f / 255f, 0f / 255f, 0f / 255f, 255f / 255f);
         
-        textChild.fontSize = 20;
+        textChild.fontSize = 14;
         textChild.alignment = TextAnchor.MiddleCenter;
         textChild.font = Resources.GetBuiltinResource (typeof(Font), "LegacyRuntime.ttf") as Font;
         return Contents;

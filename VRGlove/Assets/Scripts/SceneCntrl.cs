@@ -8,6 +8,7 @@ public class SceneCntrl : MonoBehaviour
 {
     public Const.SceneMode mode;
     public GameObject ballPrefab;
+    //private GameObject throwCntrl;
 
     //ハンドコントローラ
     public GameObject hand;
@@ -20,12 +21,12 @@ public class SceneCntrl : MonoBehaviour
 
     public void ChangeMode(Const.SceneMode nmode){
         this.mode = nmode;
-    }
+     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("Current shene="+mode);
+        //Debug.Log("Current shene="+mode);
         //ノーマルモード
         if(mode==Const.SceneMode.Normal){
             //Armのうごきを行はない
@@ -41,8 +42,9 @@ public class SceneCntrl : MonoBehaviour
             
             //右ボタンを押した場合
             if(Input.GetMouseButtonDown(1)){
-                Instantiate(this.ballPrefab);
-                this.ballPrefab.transform.position = new Vector3(0f, 0f, 8f);
+                this.gameObject.GetComponent<ThrowingCntrl>().ThrowingBall();
+                //Instantiate(this.ballPrefab);
+                //this.ballPrefab.transform.position = new Vector3(0f, 0f, 8f);
             }
         }
         //ランダムモード。

@@ -69,7 +69,7 @@ public class HandCntrl : MonoBehaviour
     public void OnGloveAngleChanged(String json)
     {
         GloveData angle = JsonUtility.FromJson<GloveData>(json);
-        Debug.Log("onGloveAngleChanged json="+json+" value="+angle.dat1+" "+angle.dat1);
+        //Debug.Log("onGloveAngleChanged json="+json+" value="+angle.dat1+" "+angle.dat1);
 
         //handの移動
         Transform tmpTransform = this.transform;
@@ -93,7 +93,7 @@ public class HandCntrl : MonoBehaviour
     public void OnGloveFingureChanged(String json)
     {
         GloveData fingure = JsonUtility.FromJson<GloveData>(json);
-        Debug.Log("OnGloveFingureChanged "+json+""+fingure.dat1+" "+fingure.dat2);
+       // Debug.Log("OnGloveFingureChanged "+json+""+fingure.dat1+" "+fingure.dat2);
 
         float f1 = Mathf.Abs(int.Parse(fingure.dat1));
         if(f1>90){
@@ -125,7 +125,7 @@ public class HandCntrl : MonoBehaviour
     public void OnGloveHandPosChanged(String json)
     {
         GloveData pos = JsonUtility.FromJson<GloveData>(json);
-        Debug.Log("OnGloveHandPosChanged "+json+" "+pos.dat1+" "+pos.dat2);
+        //Debug.Log("OnGloveHandPosChanged "+json+" "+pos.dat1+" "+pos.dat2);
 
         //handの位置移動
         Transform tmpTransform = this.transform;

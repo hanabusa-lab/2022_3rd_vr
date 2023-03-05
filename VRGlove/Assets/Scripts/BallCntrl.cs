@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class BallCntrl : MonoBehaviour
 {
+    private GameObject hand;
+
     // Start is called before the first frame update
     void Start()
     {
-        Rigidbody rb =this.transform.GetComponent<Rigidbody> ();//.set_velocityvelocity();
-        rb.velocity = new Vector3(0f, 0f, -2f);
-        //this.GetComponent<RigidBody>.velocity = new Vector3(0f, 0f, -1f);
-        this.transform.position = new Vector3(0f, 0f, 8f);
+        //Rigidbody rb =this.transform.GetComponent<Rigidbody> ();//.set_velocityvelocity();
+        //rb.velocity = new Vector3(0f, 0f, -2f);
+        //this.transform.position = new Vector3(0f, 0f, 8f);
+        hand = GameObject.Find("VRGlove");
     }
 
     // Update is called once per frame
@@ -30,8 +32,20 @@ public class BallCntrl : MonoBehaviour
 		// 今回はx軸のマイナス方向に力を加えて跳ね返す。
         //VRGloveに当たった場合には、落ちる。
         if(collision.gameObject.tag =="VRGlove"){
+            //VR Gloveの角度に応じて跳ね返る方向を変える
+            Transform tmpTransform = hand.transform;
+            Vector3 worldAngle = tmpTransform.eulerAngles;
+            worldAngle.y = Mathf.Repeat(worldAngle.y + 180, 360) - 180;
+            worldAngle.x = Mathf.Repeat(worldAngle.x + 180, 360) - 180;
+            worldAngle.x = 90f-1f*worldAngle.x+20f;
+            
+            
+            worldAngle = worldAngle.normalized;
+            Debug.Log("hand angle="+worldAngle.x+" "+worldAngle.y+" "+worldAngle.z);
+
+            var scale = 10f;
 	        Rigidbody rb =this.transform.GetComponent<Rigidbody> ();//.set_velocityvelocity();
-    	    rb.AddForce(0f, 0f, 1f, ForceMode.Impulse);
+    	    rb.AddForce(scale*worldAngle.y, scale*worldAngle.x,  scale, ForceMode.Impulse);
             rb.useGravity = true;
         }
     }
