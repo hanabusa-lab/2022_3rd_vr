@@ -6,15 +6,22 @@ using UnityEngine;
 //ハンドモデルのコントロールクラス
 public class HandCntrl : MonoBehaviour
 {
-    public Animator animator;
+    private Animator animator;
     private bool fg;
     private float f1;
     private float f2; 
+    //腕の回転の有無フラグ
+    public bool armRotateFg;
+
+    //hand arm
+    private GameObject handArm;
     
     // Start is called before the first frame update
     void Start()
     {
          animator = GetComponent<Animator>();
+         //親アームを取得する。
+         handArm = GameObject.Find("HandArm");
          fg = true;
          float f1=0;
     }
@@ -64,16 +71,22 @@ public class HandCntrl : MonoBehaviour
         GloveData angle = JsonUtility.FromJson<GloveData>(json);
         Debug.Log("onGloveAngleChanged json="+json+" value="+angle.dat1+" "+angle.dat1);
 
-        //角度回転
+        //handの移動
         Transform tmpTransform = this.transform;
- 
-        // ローカル座標を基準に、回転を取得
         Vector3 localAngle = tmpTransform.localEulerAngles;
         localAngle.x = -1*int.Parse(angle.dat1)+90.0f; // ローカル座標を基準に、x軸を軸にした回転を10度に変更
         localAngle.y = -1*int.Parse(angle.dat2); // ローカル座標を基準に、y軸を軸にした回転を10度に変更
-        localAngle.z = 10.0f; // ローカル座標を基準に、z軸を軸にした回転を10度に変更
+        //localAngle.z = 10.0f; // ローカル座標を基準に、z軸を軸にした回転を10度に変更
         tmpTransform.localEulerAngles = localAngle; // 回転角度を設定
- 
+        
+        //armの移動
+        if(armRotateFg){
+            tmpTransform = handArm.transform;
+            localAngle = tmpTransform.localEulerAngles;
+            localAngle.x = -1*int.Parse(angle.dat1)+90.0f; // ローカル座標を基準に、x軸を軸にした回転を10度に変更
+            localAngle.y = -1*int.Parse(angle.dat2); // ローカル座標を基準に、y軸を軸にした回転を10度に変更     
+            tmpTransform.localEulerAngles = localAngle; // 回転角度を設定
+        }
     }
 
     //Gloveの指の更新
@@ -127,6 +140,16 @@ public class HandCntrl : MonoBehaviour
  
     }
 
-
-
+    //Reset ArmAngle
+    //腕の角度を初期化する。
+    public void OnResetArmAgnel()
+    {
+        //armの移動
+        Transform tmpTransform = handArm.transform;
+        Vector3 localAngle = tmpTransform.localEulerAngles;
+        localAngle.x = 0;
+        localAngle.y = 0;
+        localAngle.z = 0;     
+        tmpTransform.localEulerAngles = localAngle;
+    }
 }
