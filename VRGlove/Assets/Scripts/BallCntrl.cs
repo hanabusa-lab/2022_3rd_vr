@@ -43,7 +43,7 @@ public class BallCntrl : MonoBehaviour
             worldAngle = worldAngle.normalized;
             Debug.Log("hand angle="+worldAngle.x+" "+worldAngle.y+" "+worldAngle.z);
 
-            var scale = 10f;
+            var scale = 15f;
 	        Rigidbody rb =this.transform.GetComponent<Rigidbody> ();//.set_velocityvelocity();
     	    rb.AddForce(scale*worldAngle.y, scale*worldAngle.x,  scale, ForceMode.Impulse);
             rb.useGravity = true;

@@ -16,12 +16,15 @@ public class ThrowingCntrl : MonoBehaviour
     [SerializeField, Tooltip("標的のオブジェクトをここに割り当てる")]
     public GameObject TargetObject;
 
+    //マテリアルセット
+    public Material[] ColorSet = new Material[7];
+
     /// <summary>
     /// 射出角度
     /// </summary>
     [SerializeField, Range(0F, 90F), Tooltip("射出する角度")]
     private float ThrowingAngle;
-
+  
     private void Start()
     {
         Collider collider = GetComponent<Collider>();
@@ -41,6 +44,14 @@ public class ThrowingCntrl : MonoBehaviour
         {
             // Ballオブジェクトの生成
             GameObject ball = Instantiate(ThrowingObject, this.transform.position, Quaternion.identity);
+            int ColorNo = Random.Range(0, 7);
+            ball.GetComponent<MeshRenderer>().material = ColorSet[ColorNo];
+            int random = Random.Range(0, 3);
+            float [] randomScale  = new float[] {0.1f, 1.0f, 10.0f, 20,0f};
+            
+             Vector3 scale = new Vector3(randomScale[random], randomScale[random],randomScale[random]);
+             ball.transform.localScale = scale;
+
 
             // 標的の座標
             Vector3 targetPosition = TargetObject.transform.position;

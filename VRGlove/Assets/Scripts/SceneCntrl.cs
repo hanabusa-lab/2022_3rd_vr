@@ -8,6 +8,7 @@ public class SceneCntrl : MonoBehaviour
 {
     public Const.SceneMode mode;
     public GameObject ballPrefab;
+    public GameObject BlockPrefab;
     //private GameObject throwCntrl;
 
     //ハンドコントローラ
@@ -17,6 +18,16 @@ public class SceneCntrl : MonoBehaviour
     void Start()
     {
         mode = SceneMode.Normal;
+        for(float x=-30f; x<=30f; x+=2f){
+            for(float y=-4f; y<=10f; y+=2f){
+                GameObject ball = Instantiate(BlockPrefab, new Vector3(x, y, 40f), Quaternion.identity);
+            }
+        }
+        for(float x=-30f; x<=30f; x+=4f){
+                GameObject ball = Instantiate(BlockPrefab, new Vector3(x, 12f, 40f), Quaternion.identity);
+        }
+       
+
     }
 
     public void ChangeMode(Const.SceneMode nmode){
@@ -53,4 +64,6 @@ public class SceneCntrl : MonoBehaviour
             hand.GetComponent<HandCntrl>().armRotateFg=true;
          }
     }
+
+
 }

@@ -16,6 +16,13 @@ public class HandCntrl : MonoBehaviour
     //hand arm
     private GameObject handArm;
     
+    //手のモデル
+    private GameObject handModel;
+
+    //マテリアルセット
+    public Material[] ColorSet = new Material[7];
+    private int colorIndex;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +31,12 @@ public class HandCntrl : MonoBehaviour
          handArm = GameObject.Find("HandArm");
          fg = true;
          float f1=0;
+
+         //handモデルの色を変える
+         handModel=GameObject.Find("HandModel");
+         colorIndex = 0;
+         handModel.GetComponent<Renderer>().material = ColorSet[colorIndex];
+
     }
 
     // Update is called once per frame
@@ -151,5 +164,15 @@ public class HandCntrl : MonoBehaviour
         localAngle.y = 0;
         localAngle.z = 0;     
         tmpTransform.localEulerAngles = localAngle;
+    }
+
+    public void ChangeGloveColoe(){
+        colorIndex +=1;
+        Debug.Log(ColorSet.Length);
+        if(colorIndex>=ColorSet.Length){
+            colorIndex = 0;
+        }
+         handModel.GetComponent<Renderer>().material = ColorSet[colorIndex];
+
     }
 }
