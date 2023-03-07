@@ -7,6 +7,7 @@ using Const;
 public class SceneCntrl : MonoBehaviour
 {
     public Const.SceneMode mode;
+    public Const.SceneMode premode;
     public GameObject ballPrefab;
     public GameObject BlockPrefab;
     //private GameObject throwCntrl;
@@ -14,20 +15,38 @@ public class SceneCntrl : MonoBehaviour
     //ハンドコントローラ
     public GameObject hand;
 
+    //block list
+    private List<GameObject> blockList;
+
     // Start is called before the first frame update
     void Start()
     {
+        blockList = new List<GameObject>();
+
         mode = SceneMode.Normal;
+        premode = SceneMode.Normal;
+    }
+
+    //Blockを作成する
+    private void CreateBlock(){
         for(float x=-30f; x<=30f; x+=2f){
             for(float y=-4f; y<=10f; y+=2f){
                 GameObject ball = Instantiate(BlockPrefab, new Vector3(x, y, 40f), Quaternion.identity);
+                blockList.Add(ball);
             }
         }
         for(float x=-30f; x<=30f; x+=4f){
                 GameObject ball = Instantiate(BlockPrefab, new Vector3(x, 12f, 40f), Quaternion.identity);
+                blockList.Add(ball);
         }
-       
+    }
 
+    //Blockを削除する
+    private void ClearBlock(){
+        blockList.ForEach(i => {
+        Destroy(i); 
+        });
+        blockList.Clear();
     }
 
     public void ChangeMode(Const.SceneMode nmode){
@@ -38,6 +57,17 @@ public class SceneCntrl : MonoBehaviour
     void Update()
     {
         //Debug.Log("Current shene="+mode);
+        //モード切りかえ
+        //SimpleBallの場合はブロックを作成する。
+        if(premode!=mode && mode==Const.SceneMode.SimpleBall){
+             CreateBlock();
+        }
+        //SimpleBall以外に切り替わった場合
+        if(premode!=mode && premode==Const.SceneMode.SimpleBall){
+             ClearBlock();
+        }
+
+
         //ノーマルモード
         if(mode==Const.SceneMode.Normal){
             //Armのうごきを行はない
@@ -63,6 +93,8 @@ public class SceneCntrl : MonoBehaviour
             //Armのうごきを行う
             hand.GetComponent<HandCntrl>().armRotateFg=true;
          }
+
+         premode = mode;
     }
 
 
