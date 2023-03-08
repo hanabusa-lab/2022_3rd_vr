@@ -24,8 +24,8 @@ public class ModeButtonCntrl : MonoBehaviour
         sceneCntrl.GetComponent<SceneCntrl>().mode = Const.SceneMode.SimpleBall;
     }
 
-    public void OnClickRandomBall()
+    public void OnClickRandomCoins()
     {
-        sceneCntrl.GetComponent<SceneCntrl>().mode = Const.SceneMode.RandomBalls;
+        sceneCntrl.GetComponent<SceneCntrl>().mode = Const.SceneMode.RandomCoin;
     }
 }

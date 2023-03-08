@@ -8,7 +8,8 @@ public class ThrowingCntrl : MonoBehaviour
     /// 射出するオブジェクト
     /// </summary>
     [SerializeField, Tooltip("射出するオブジェクトをここに割り当てる")]
-    public GameObject ThrowingObject;
+    public GameObject Ball;
+    public GameObject Coin;
 
     /// <summary>
     /// 標的のオブジェクト
@@ -40,10 +41,10 @@ public class ThrowingCntrl : MonoBehaviour
     /// </summary>
     public void ThrowingBall()
     {
-        if (ThrowingObject != null && TargetObject != null)
+        if (Ball != null && TargetObject != null)
         {
             // Ballオブジェクトの生成
-            GameObject ball = Instantiate(ThrowingObject, this.transform.position, Quaternion.identity);
+            GameObject ball = Instantiate(Ball, this.transform.position, Quaternion.identity);
             int ColorNo = Random.Range(0, 7);
             ball.GetComponent<MeshRenderer>().material = ColorSet[ColorNo];
             int random = Random.Range(0, 3);
@@ -71,6 +72,38 @@ public class ThrowingCntrl : MonoBehaviour
             throw new System.Exception("射出するオブジェクトまたは標的のオブジェクトが未設定です。");
         }
     }
+
+    /// <summary>
+    /// コインを射出する
+    /// </summary>
+    public void ThrowingCoin(Vector3 targetPosition)
+    {
+        if (Coin != null && TargetObject != null)
+        {
+            // Ballオブジェクトの生成
+            GameObject coin = Instantiate(Coin, this.transform.position, Quaternion.identity);
+            
+
+            // 標的の座標
+            //Vector3 targetPosition = TargetObject.transform.position;
+
+            // 射出角度
+            float angle = ThrowingAngle;
+
+            // 射出速度を算出
+            Vector3 velocity = CalculateVelocity(this.transform.position, targetPosition, 15f);
+
+            // 射出
+            Rigidbody rid = coin.GetComponent<Rigidbody>();
+            rid.AddForce(velocity * rid.mass, ForceMode.Impulse);
+        }
+        else
+        {
+            throw new System.Exception("射出するオブジェクトまたは標的のオブジェクトが未設定です。");
+        }
+    }
+
+
 
     /// <summary>
     /// 標的に命中する射出速度の計算

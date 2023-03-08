@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1134,7 +1134,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u30E9\u30F3\u30C0\u30E0\u30DC\u30FC\u30EB"
+  m_Text: "\u30E9\u30F3\u30C0\u30E0\u30B3\u30A4\u30F3"
 --- !u!222 &499042025
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1397,7 +1397,7 @@ GameObject:
   - component: {fileID: 590537787}
   - component: {fileID: 590537790}
   m_Layer: 5
-  m_Name: "\u30E9\u30F3\u30C0\u30E0\u30DC\u30FC\u30EB"
+  m_Name: "\u30E9\u30F3\u30C0\u30B3\u30A4\u30F3"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1470,7 +1470,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 590537790}
         m_TargetAssemblyTypeName: ModeButtonCntrl, Assembly-CSharp
-        m_MethodName: OnClickRandomBall
+        m_MethodName: OnClickRandomCoins
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1953,6 +1953,9 @@ MonoBehaviour:
   - {fileID: 2100000, guid: d09a23047f3e8fb4fa451722bb59f022, type: 2}
   - {fileID: 2100000, guid: 104b45acd4b6ea34ea09a3b892d7029b, type: 2}
   - {fileID: 2100000, guid: b5fc1cabcf425ec46b217648add6c256, type: 2}
+  fingureAngle1: 0
+  fingureAngle2: 0
+  havingObject: {fileID: 0}
 --- !u!65 &996575835
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2213,8 +2216,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mode: 0
+  premode: 0
   ballPrefab: {fileID: 5673540781885071428, guid: 9ca02f463e4b7461daf4fbe44b9a5a9a, type: 3}
   BlockPrefab: {fileID: 1985682203985031889, guid: a4987ce5e33fef748b15837c2cae2c94, type: 3}
+  coinPrefab: {fileID: 8414484538739355279, guid: 0af068ac8c6fdb74a9edc318b31a726b, type: 3}
   hand: {fileID: 996575825}
 --- !u!4 &1209533845
 Transform:
@@ -2243,8 +2248,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faffd502de0ce5c4581e543238ce8275, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ThrowingObject: {fileID: 1426153588778117219, guid: 453ec6cd1308c9349a63e28e14e41a6f, type: 3}
-  TargetObject: {fileID: 2035125468}
+  Ball: {fileID: 1426153588778117219, guid: 453ec6cd1308c9349a63e28e14e41a6f, type: 3}
+  Coin: {fileID: 8414484538739355279, guid: 0af068ac8c6fdb74a9edc318b31a726b, type: 3}
+  TargetObject: {fileID: 996575825}
   ColorSet:
   - {fileID: 2100000, guid: 1e45f40cad392594da6a604519ec9dc2, type: 2}
   - {fileID: 2100000, guid: 834e79e4563253c4786fb1373d1fe69f, type: 2}
@@ -2751,7 +2757,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1920031284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2764,8 +2770,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faffd502de0ce5c4581e543238ce8275, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ThrowingObject: {fileID: 1426153588778117219, guid: 453ec6cd1308c9349a63e28e14e41a6f, type: 3}
-  TargetObject: {fileID: 2035125468}
+  Ball: {fileID: 1426153588778117219, guid: 453ec6cd1308c9349a63e28e14e41a6f, type: 3}
+  Coin: {fileID: 8414484538739355279, guid: 0af068ac8c6fdb74a9edc318b31a726b, type: 3}
+  TargetObject: {fileID: 996575825}
   ColorSet:
   - {fileID: 0}
   - {fileID: 0}

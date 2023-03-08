@@ -1,3 +1,8 @@
 namespace Const {
-    public enum SceneMode{Normal, SimpleBall, RandomBalls};
+    //シーンモード
+    public enum SceneMode{Normal, SimpleBall, RandomCoin};
+
+    //グー、チョキ、パー
+    public enum JankenType{Guu, Choki, Paa};
+
 }

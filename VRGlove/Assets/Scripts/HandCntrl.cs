@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Const;
 
 //ハンドモデルのコントロールクラス
 public class HandCntrl : MonoBehaviour
@@ -23,6 +24,14 @@ public class HandCntrl : MonoBehaviour
     public Material[] ColorSet = new Material[7];
     private int colorIndex;
 
+    //指の値
+    public float fingureAngle1, fingureAngle2;
+
+    //持っているかいなか
+    //public bool catchingFg;
+
+    public GameObject havingObject;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,6 +46,14 @@ public class HandCntrl : MonoBehaviour
          colorIndex = 0;
          handModel.GetComponent<Renderer>().material = ColorSet[colorIndex];
 
+         //指の値を初期化
+        fingureAngle1 = 0; 
+        fingureAngle2 = 0;
+
+        //持っているかフラグ
+        //catchingFg=false; 
+
+        havingObject = null;
     }
 
     // Update is called once per frame
@@ -112,6 +129,10 @@ public class HandCntrl : MonoBehaviour
         if(f1>90){
             f1=90;
         }
+        //0-90の傾きを指の角度として保持しておく
+        fingureAngle1 = f1;
+
+        //アニメーションのために0-1に正規化
         f1 = f1/90.0f;
         animator.SetFloat("f1",f1);
 
@@ -119,7 +140,10 @@ public class HandCntrl : MonoBehaviour
         if(f2>90){
             f2=90;
         }
-        f2 = f2/90.1f;
+        fingureAngle2 = f2;
+
+        //アニメーションのために0-1に正規化
+        f2 = f2/90f;
         animator.SetFloat("f2",f2);
 
         //チョキ対応 f1の値がみの値が大きい場合には、f3-f5は握ったままにする。
@@ -175,4 +199,17 @@ public class HandCntrl : MonoBehaviour
          handModel.GetComponent<Renderer>().material = ColorSet[colorIndex];
 
     }
+
+    //手の状況を確認を行う
+    public Const.JankenType checkJankenType(){
+        //今のところ、ぐーとぱーだけ
+        //デフォルトはパー
+        Const.JankenType type = Const.JankenType.Paa;
+
+        if(fingureAngle1>45 || fingureAngle2>45){
+            type = Const.JankenType.Guu;
+        }
+        return type;
+    }
+
 }
