@@ -14,7 +14,7 @@ public class Cube : MonoBehaviour
     private bool isAvatarChangeReq = false;
     //画像リンク
     //string url = "https://touhoucannonball.com/assets/img/character/img_008.jpg";
-    string url = "http://127.0.0.1:5555/000.png";
+    string url = "http://127.0.0.1:5555/000.jpg";
     // string url = "https://drive.google.com/file/d/1jfq3PupcEhAYDnmBpBRZ16NKM0SimorF/view?usp=share_link";
     //string url = "http://drive.google.com/uc?export=view&id=1UTbyIf-WYuvqkj9J96bDUabXf2cCK59Q";
 
@@ -78,7 +78,7 @@ public class Cube : MonoBehaviour
         Debug.Log(num);
         while(num < 99){
             num = num + 1;
-            string urlNext = "http://127.0.0.1:5555/" + num.ToString("000") + ".png";
+            string urlNext = "http://127.0.0.1:5555/" + num.ToString("000") + ".jpg";
             Debug.Log (urlNext);
             UnityWebRequest www = UnityWebRequestTexture.GetTexture(urlNext);
             yield return www.SendWebRequest();
@@ -100,7 +100,7 @@ public class Cube : MonoBehaviour
         }
         if(isNextTexFound == false){
             num = 0;
-            string urlNext = "http://127.0.0.1:5555/" + num.ToString("000") + ".png";
+            string urlNext = "http://127.0.0.1:5555/" + num.ToString("000") + ".jpg";
             Debug.Log (urlNext);
             UnityWebRequest www = UnityWebRequestTexture.GetTexture(urlNext);
             yield return www.SendWebRequest();

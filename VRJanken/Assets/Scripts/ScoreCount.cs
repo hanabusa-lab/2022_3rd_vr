@@ -11,6 +11,7 @@ public class ScoreCount : MonoBehaviour
     private int jankenHand = 0;
     public HandCntrl handCntrl;
     public GameManager gameManager;
+    private int jankenHandPre = 0;
 
     [SerializeField]  AudioSource source1;
     [SerializeField]  AudioSource source2;
@@ -34,11 +35,11 @@ public class ScoreCount : MonoBehaviour
             jankenHand = 0;
         }
         jankenHand = handCntrl.janken;
-        gameObject.GetComponent<Renderer>().material = ColorSet[jankenHand];
-
-        if(gameManager.isPlayingGame){
-            score = 0;
+        if(jankenHandPre != jankenHand){
+            gameObject.GetComponent<Renderer>().material = ColorSet[jankenHand];
         }
+        jankenHandPre = jankenHand;
+        
 
     }
  
@@ -50,7 +51,8 @@ public class ScoreCount : MonoBehaviour
         {
             if(jankenHand == 1){
                 source1.PlayOneShot(clip1);
-                Destroy(collision.gameObject); //オブジェクトを消す
+                // Destroy(collision.gameObject); //オブジェクトを消す
+                collision.gameObject.SetActive(false);
                 score = score + 5;
             }else{
                 source2.PlayOneShot(clip2);
@@ -61,7 +63,8 @@ public class ScoreCount : MonoBehaviour
         {
             if(jankenHand == 3){
                 source1.PlayOneShot(clip1);
-                Destroy(collision.gameObject); //オブジェクトを消す
+                // Destroy(collision.gameObject); //オブジェクトを消す
+                collision.gameObject.SetActive(false);
                 score = score + 5;
             }else{
                 source2.PlayOneShot(clip2);
@@ -72,7 +75,8 @@ public class ScoreCount : MonoBehaviour
         {
             if(jankenHand == 2){
                 source1.PlayOneShot(clip1);
-                Destroy(collision.gameObject); //オブジェクトを消す
+                // Destroy(collision.gameObject); //オブジェクトを消す
+                collision.gameObject.SetActive(false);
                 score = score + 5;
             }else{
                 source2.PlayOneShot(clip2);
@@ -83,7 +87,13 @@ public class ScoreCount : MonoBehaviour
         //ぶつかった相手にDeleteタグがついているとき
         if (collision.gameObject.CompareTag("Delete"))
         {
-            Destroy(collision.gameObject); //オブジェクトを消す
+            // Destroy(collision.gameObject); //オブジェクトを消す
+            collision.gameObject.SetActive(false);
+                
         }
+    }
+
+    public void ResetScore(){
+        score = 0;
     }
 }

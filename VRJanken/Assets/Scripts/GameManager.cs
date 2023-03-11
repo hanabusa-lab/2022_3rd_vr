@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
  
     void Start()
     {
-       
+       Application.targetFrameRate = 30;
         retryButton.SetActive(true); //リトライボタンを非表示
         DestroyJanken.SetActive(false);
         isPlayingGame = false;

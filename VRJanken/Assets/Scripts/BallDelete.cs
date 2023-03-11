@@ -12,18 +12,21 @@ public class BallDelete : MonoBehaviour
         currentTime += Time.deltaTime;
 
         if(currentTime > span){
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            // gameObject.SetActive(false);
         }
         
     }
 
     public void OnCollisionEnter(Collision collision){
         if(collision.gameObject.CompareTag("Delete")){
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            gameObject.SetActive(false);
         } 
     }
     public void EndGame(){
-         Destroy(gameObject);
+         //Destroy(gameObject);
+         gameObject.SetActive(false);
     }
     
 }
