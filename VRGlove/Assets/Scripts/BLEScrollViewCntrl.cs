@@ -143,6 +143,7 @@ public class BLEScrollViewCntrl : MonoBehaviour
         //スキャンが未実地の場合 スキャンを開始する。
         if (!bleCntrlWinrt.IsScanning()){
             //スキャンごとに状態をクリアする。
+            clearMicrobitButton();
             bleCntrlWinrt.Disconnect();
             bleCntrlWinrt.StartScanHandler();
         }
