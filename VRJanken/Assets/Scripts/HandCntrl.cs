@@ -10,6 +10,10 @@ public class HandCntrl : MonoBehaviour
     private bool fg;
     private float f1;
     private float f2; 
+    public float anglex = 0;
+    public float angley = 0;
+    public float anglez = 0;
+    public int janken = 0; // 1: グー, 2: チョキ, 3: パー
     
     // Start is called before the first frame update
     void Start()
@@ -69,11 +73,22 @@ public class HandCntrl : MonoBehaviour
  
         // ローカル座標を基準に、回転を取得
         Vector3 localAngle = tmpTransform.localEulerAngles;
-        localAngle.x = -1*int.Parse(angle.dat1)+90.0f; // ローカル座標を基準に、x軸を軸にした回転を10度に変更
-        localAngle.y = -1*int.Parse(angle.dat2); // ローカル座標を基準に、y軸を軸にした回転を10度に変更
+        // localAngle.x = -1*int.Parse(angle.dat1)+90.0f; // ローカル座標を基準に、x軸を軸にした回転を10度に変更
+        //localAngle.y = -1*int.Parse(angle.dat2); // ローカル座標を基準に、y軸を軸にした回転を10度に変更
         localAngle.z = 10.0f; // ローカル座標を基準に、z軸を軸にした回転を10度に変更
+        localAngle.x = -65f;
+        // localAngle.x = 180f; // ローカル座標を基準に、x軸を軸にした回転を10度に変更
+        // localAngle.y = 0f; // ローカル座標を基準に、y軸を軸にした回転を10度に変更
+        // localAngle.z = 10.0f; // ローカル座標を基準に、z軸を軸にした回転を10度に変更
+        
         tmpTransform.localEulerAngles = localAngle; // 回転角度を設定
- 
+
+        anglex = -1*int.Parse(angle.dat2);
+        angley = -1*int.Parse(angle.dat2);
+        anglez = -1*int.Parse(angle.dat1)+90.0f;
+
+        
+        
     }
 
     //Gloveの指の更新
@@ -106,16 +121,26 @@ public class HandCntrl : MonoBehaviour
         animator.SetFloat("f3",f3);
         animator.SetFloat("f4",of);
         animator.SetFloat("f5",of);
+
+        if(f1 > 0.5 && f2 > 0.5){
+            janken = 1; // グー
+        }else if(f1 > 0.5 && f2 <= 0.5){
+            janken = 2; //チョキ
+        }else if (f1 <= 0.5 && f2 <= 0.5){
+            janken = 3; // パー
+        }else {
+            janken = janken;
+        }
     }
     
     //GloveのHand位置の更新
     public void OnGloveHandPosChanged(String json)
     {
-        GloveData pos = JsonUtility.FromJson<GloveData>(json);
-        Debug.Log("OnGloveHandPosChanged "+json+" "+pos.dat1+" "+pos.dat2);
+        // GloveData pos = JsonUtility.FromJson<GloveData>(json);
+        // Debug.Log("OnGloveHandPosChanged "+json+" "+pos.dat1+" "+pos.dat2);
 
         //handの位置移動
-        Transform tmpTransform = this.transform;
+        // Transform tmpTransform = this.transform;
         /*
         Vector3 localAngle = tmpTransform.localEulerAngles;
         localAngle.x = -1*int.Parse(angle.p)+90.0f; // ローカル座標を基準に、x軸を軸にした回転を10度に変更
@@ -123,8 +148,13 @@ public class HandCntrl : MonoBehaviour
         localAngle.z = 10.0f; // ローカル座標を基準に、z軸を軸にした回転を10度に変更
         tmpTransform.localEulerAngles = localAngle; // 回転角度を設定
         */
-        this.transform.position = new Vector3(int.Parse(pos.dat1)/100.0f, int.Parse(pos.dat2)/100.0f, tmpTransform.position.z);
- 
+        
+        // this.transform.position = new Vector3(int.Parse(pos.dat1)/100.0f, int.Parse(pos.dat2)/100.0f, tmpTransform.position.z);
+        // Vector3 localPos = this.transform.localPosition;
+        // localPos.x = 0.011388f;
+        // localPos.y = 3f;
+        // localPos.z = -0f;
+        // this.transform.position = localPos;
     }
 
 

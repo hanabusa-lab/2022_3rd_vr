@@ -9,6 +9,8 @@ public class ScoreCount : MonoBehaviour
     public Text ScoreText; //表示するテキスト
     public Material[] ColorSet;
     private int jankenHand = 0;
+    public HandCntrl handCntrl;
+    public GameManager gameManager;
 
     [SerializeField]  AudioSource source1;
     [SerializeField]  AudioSource source2;
@@ -18,7 +20,7 @@ public class ScoreCount : MonoBehaviour
     void Update()
     {
         //scoreのデータをテキスト形式に変換。スコアテキストを表示する。
-        ScoreText.text = "SCORE: " + score.ToString();
+        ScoreText.text = "ポイント: " + score.ToString();
         if (Input.GetKey (KeyCode.Z)) {
             jankenHand = 1;
         }
@@ -31,7 +33,12 @@ public class ScoreCount : MonoBehaviour
         if (Input.GetKey (KeyCode.V)) {
             jankenHand = 0;
         }
+        jankenHand = handCntrl.janken;
         gameObject.GetComponent<Renderer>().material = ColorSet[jankenHand];
+
+        if(gameManager.isPlayingGame){
+            score = 0;
+        }
 
     }
  
@@ -44,9 +51,10 @@ public class ScoreCount : MonoBehaviour
             if(jankenHand == 1){
                 source1.PlayOneShot(clip1);
                 Destroy(collision.gameObject); //オブジェクトを消す
-                score++; //scoreを1増やす
+                score = score + 5;
             }else{
                 source2.PlayOneShot(clip2);
+                score = score + 1;
             }
         }
         if (collision.gameObject.CompareTag("JankenGu"))
@@ -54,9 +62,10 @@ public class ScoreCount : MonoBehaviour
             if(jankenHand == 3){
                 source1.PlayOneShot(clip1);
                 Destroy(collision.gameObject); //オブジェクトを消す
-                score++; //scoreを1増やす
+                score = score + 5;
             }else{
                 source2.PlayOneShot(clip2);
+                score = score + 1;
             }
         }
         if (collision.gameObject.CompareTag("JankenPa"))
@@ -64,9 +73,10 @@ public class ScoreCount : MonoBehaviour
             if(jankenHand == 2){
                 source1.PlayOneShot(clip1);
                 Destroy(collision.gameObject); //オブジェクトを消す
-                score++; //scoreを1増やす
+                score = score + 5;
             }else{
                 source2.PlayOneShot(clip2);
+                score = score + 1;
             }
         }
  

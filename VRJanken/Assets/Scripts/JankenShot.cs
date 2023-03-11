@@ -5,15 +5,16 @@ using UnityEngine;
 public class JankenShot : MonoBehaviour
 {
     public GameObject[] prefab; //ボールのPrefabデータを入れる
-    public float power; //ボールに加える力
+    private float power; //ボールに加える力
     private float time; //連射防止
     [SerializeField] GameObject player;
     // private float ballSpeed = 10.0f;
     private float timeTotal = 0f;
+    public GameManager gameManager;
  
     void Start()
     {
-        time = 5.0f; //タイムを2秒で始めて、最初の1回は発射OK
+        time = 6.0f; //タイムを2秒で始めて、最初の1回は発射OK
         timeTotal = 0f;
     }
  
@@ -26,13 +27,28 @@ public class JankenShot : MonoBehaviour
         // transform.Translate(0, Random.Range(-3, 3), Random.Range(-3, 3), Space.World); // ワールドのX軸方向に1移動
         transform.position = new Vector3(-20, Random.Range(5, 15), Random.Range(-15, 15));
         transform.LookAt(player.transform);
-        float timeSpan = 3f;
-        if(timeTotal > 30f){
+        float timeSpan = 4f;
+        power = 3;
+        if(timeTotal > 20f){
+            timeSpan = 3f;
+            power = 6;
+        }
+        if(timeTotal > 45f){
+            timeSpan = 2f;
+            power = 10;
+        }
+        if(timeTotal > 55f){
             timeSpan = 1f;
+            power = 14;
         }
         if(time >= timeSpan)　//連射防止 2秒たてば実行
         {
-            shot();
+            if(gameManager.isPlayingGame){
+                shot();
+            }else{
+                timeTotal = 0;
+            }
+            
             time = 0.0f;　//連射防止 タイマーを0に戻す
             //}
         }

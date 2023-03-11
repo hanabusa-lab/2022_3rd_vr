@@ -4,13 +4,26 @@ using UnityEngine;
  
 public class BallDelete : MonoBehaviour
 {
-    void Update()
-    {
-        //Y座標-10まで落下したとき
-        if(transform.position.y <= -10f)
-        {
-            //オブジェクトを削除する
+    public float span = 5f;
+    private float currentTime = 0f;
+
+   
+    void Update () {
+        currentTime += Time.deltaTime;
+
+        if(currentTime > span){
             Destroy(gameObject);
         }
+        
     }
+
+    public void OnCollisionEnter(Collision collision){
+        if(collision.gameObject.CompareTag("Delete")){
+            Destroy(gameObject);
+        } 
+    }
+    public void EndGame(){
+         Destroy(gameObject);
+    }
+    
 }

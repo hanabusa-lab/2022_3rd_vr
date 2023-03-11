@@ -6,48 +6,60 @@ using UnityEngine.SceneManagement; //シーンをロードする際に必要
  
 public class GameManager : MonoBehaviour
 {
-    public GameObject[] targetArray;
-    private int count;
     private float time;
     private int vecY;
     public Text timeUp;
-    private float lastTime = 60.0f;
+    private float lastTime = 0f;
     public GameObject retryButton;  //リトライボタンを入れる変数
+    public bool isPlayingGame = false;
+    public AudioSource audioSource;
+    public AudioSource audioSourceEnd;
+    private bool enbEndSound = false;
+    public GameObject DestroyJanken;
  
     void Start()
     {
-        count = 0;
-        retryButton.SetActive(false); //リトライボタンを非表示
+       
+        retryButton.SetActive(true); //リトライボタンを非表示
     }
  
     void Update()
     {
-        if(count == targetArray.Length)
-        {
-            lastTime -= Time.deltaTime;
+        //Debug.Log(lastTime);
+            
             if(lastTime <= 0 )
             {
-                timeUp.text = "TIME UP";
-                GetComponent<BallShot>().enabled = false;
+                
                 retryButton.SetActive(true); //リトライボタンを表示
-            }
+                audioSource.Stop(); 
+                if(isPlayingGame == true){
+                    audioSourceEnd.Play(); 
+                    timeUp.text = "タイムアップ！";
+                }
+                isPlayingGame = false;
+                DestroyJanken.SetActive(true);
+                
+            
         }
         else 
         {
-            time -= Time.deltaTime;
-            if(time <= 0.0f)
-            {
-                vecY = Random.Range(0,12);
-                //Instantiate(targetArray[count],new Vector3(-20, vecY, -2),Quaternion.identity);
-                time = 5.0f;
-                count++;
-            }
+            lastTime -= Time.deltaTime;
+            timeUp.text = "のこりじかん：" + lastTime.ToString("000");
+            
+            // audioSource.Play(); 
+            
         } 
     }
  
     //シーンを再ロードする（リトライ）
     public void Retry()
     { 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        isPlayingGame = true;
+        lastTime = 80.0f;
+        timeUp.text = "";
+        retryButton.SetActive(false); 
+        audioSource.Play(); 
+        enbEndSound = true;
+        DestroyJanken.SetActive(false);
 　　}
 }
