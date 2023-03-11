@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour
     {
        
         retryButton.SetActive(true); //リトライボタンを非表示
+        DestroyJanken.SetActive(false);
+        isPlayingGame = false;
     }
  
     void Update()

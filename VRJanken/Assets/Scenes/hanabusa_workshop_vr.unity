@@ -99,7 +99,7 @@ LightmapSettings:
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 112000000, guid: ec23a03b8aa28344ea615cfcd8872bf2,
     type: 2}
-  m_LightingSettings: {fileID: 4890085278179872738, guid: 81ee953c6cdea4b4ab56152a6bbf7259,
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 6bd062fd3070ceb4d9941cdcddd25584,
     type: 2}
 --- !u!196 &4
 NavMeshSettings:
@@ -921,7 +921,6 @@ MonoBehaviour:
   - {fileID: 9070164911456616558, guid: bf81da63e18939d4a8a8a5f0270680a7, type: 3}
   - {fileID: 8782459807545634760, guid: 2465de648f433864a85703d571a0eedb, type: 3}
   player: {fileID: 1153114142}
-  gameManager: {fileID: 136666517}
 --- !u!23 &249591864
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2602,23 +2601,11 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 619e34bf89f944823b530a1315c16d08,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1055626505}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 619e34bf89f944823b530a1315c16d08,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1055626509}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 619e34bf89f944823b530a1315c16d08,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1055626508}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 619e34bf89f944823b530a1315c16d08,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1055626507}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 619e34bf89f944823b530a1315c16d08,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1055626511}
     - targetCorrespondingSourceObject: {fileID: -8393479053450756790, guid: 619e34bf89f944823b530a1315c16d08,
         type: 3}
       insertIndex: -1
@@ -2657,53 +2644,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1055626500}
   m_PrefabAsset: {fileID: 0}
---- !u!64 &1055626505
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1055626501}
-  m_Material: {fileID: 13400000, guid: 82f4fd64c26ea9842a0bf1e5bb8b19ba, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 5697981573486261527, guid: 619e34bf89f944823b530a1315c16d08, type: 3}
---- !u!114 &1055626507
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1055626501}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5bc2180d8497ca4687d0df1bdfef829, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  score: 0
-  ScoreText: {fileID: 1402704139}
-  ColorSet:
-  - {fileID: 2100000, guid: 965a00736b0ef6e42b2b4acca7671fae, type: 2}
-  - {fileID: 2100000, guid: 08343e4ca51680e46aaf34dda1745f98, type: 2}
-  - {fileID: 2100000, guid: 77f45a9ce2f84f54681eeea2ff2d3efe, type: 2}
-  - {fileID: 2100000, guid: a961544d89f4b6d439aae192bad92312, type: 2}
-  handCntrl: {fileID: 1055626502}
-  gameManager: {fileID: 0}
-  source1: {fileID: 1055626509}
-  source2: {fileID: 1055626508}
-  clip1: {fileID: 8300000, guid: c72e0ba0fe504ff42905eb85bf208274, type: 3}
-  clip2: {fileID: 8300000, guid: 40e24498681a978488bd5b55a245db25, type: 3}
 --- !u!82 &1055626508
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2896,27 +2836,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!65 &1055626511
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1055626501}
-  m_Material: {fileID: 13400000, guid: 82f4fd64c26ea9842a0bf1e5bb8b19ba, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.07, y: 0.2, z: 0.2}
-  m_Center: {x: 0, y: 0.1, z: -0.1}
 --- !u!1 &1066557683
 GameObject:
   m_ObjectHideFlags: 0
@@ -4040,36 +3959,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: -341120342236234687, guid: bf81da63e18939d4a8a8a5f0270680a7,
-          type: 3}
-        m_TargetAssemblyTypeName: BallDelete, Assembly-CSharp
-        m_MethodName: EndGame
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 5198304657286105563, guid: 109dbfa9465605c45bd8c8f956df4bdd,
-          type: 3}
-        m_TargetAssemblyTypeName: BallDelete, Assembly-CSharp
-        m_MethodName: EndGame
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: -5911365559628724341, guid: 2465de648f433864a85703d571a0eedb,
-          type: 3}
-        m_TargetAssemblyTypeName: BallDelete, Assembly-CSharp
-        m_MethodName: EndGame
+      - m_Target: {fileID: 249591862}
+        m_TargetAssemblyTypeName: JankenShot, Assembly-CSharp
+        m_MethodName: setGameStart
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5310,7 +5202,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 29f815aec02835a4f8a91352a272cd0d, type: 2}
   - {fileID: 2100000, guid: af34a0fe3a23f4b4fa56e439a492dc90, type: 2}
   handCntrl: {fileID: 1055626502}
-  gameManager: {fileID: 0}
+  gameManager: {fileID: 136666517}
   source1: {fileID: 1055626509}
   source2: {fileID: 1055626508}
   clip1: {fileID: 8300000, guid: c72e0ba0fe504ff42905eb85bf208274, type: 3}
