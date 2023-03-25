@@ -67,7 +67,7 @@ public class BLEScrollViewCntrl : MonoBehaviour
         var rect = textObj.AddComponent<RectTransform>();
         rect.transform.localPosition = new Vector3(0, 0, 0);
         rect.transform.localScale = new Vector3(1, 1, 1);
-        rect.sizeDelta = new Vector2(900, 90);
+        rect.sizeDelta = new Vector2(900, 30);
 
         textObj.AddComponent<CanvasRenderer>();
 
@@ -76,7 +76,7 @@ public class BLEScrollViewCntrl : MonoBehaviour
         //textChild.color = new Color(255f / 255f, 255f / 255f, 255f / 255f, 255f / 255f);
         textChild.color = new Color(0f / 255f, 0f / 255f, 0f / 255f, 255f / 255f);
         
-        textChild.fontSize = 13;
+        textChild.fontSize = 20;
         textChild.alignment = TextAnchor.MiddleCenter;
         textChild.font = Resources.GetBuiltinResource (typeof(Font), "LegacyRuntime.ttf") as Font;
         //Font font = Resources.Load<Font>("Assets/Fonts/NotoSansJP-Regular.otf");
@@ -91,11 +91,25 @@ public class BLEScrollViewCntrl : MonoBehaviour
         //var scrollView = GameObject.Find("BLEScrollView");
         //var viewPort = scrollView.transform.Find("Viewport");
     
-
-
         //var scrollView = GameObject.Find("Scroll View");
         var viewPort = this.gameObject.transform.Find("Viewport");
         Transform content = viewPort.transform.Find("Content");
+
+        //項目が存在していなかったら追加する。
+        var children = new Transform[content.childCount];
+        var childIndex = 0;
+        // 子オブジェクトを順番に配列に格納
+        foreach (Transform child in content)
+        {
+            children[childIndex++] = child;
+        }
+        for(var i = 0; i<childIndex; i++){
+            Debug.Log("Child Name["+i+"]="+children[i].name);
+            if(children[i].name==deviceName){
+                Debug.Log("already exist "+deviceName);
+                return;
+            }
+        }
 
         GameObject button = createButton(deviceName);
         button.transform.SetParent(content.transform);
@@ -103,7 +117,7 @@ public class BLEScrollViewCntrl : MonoBehaviour
     }
 
     //ボタンからmicri:bitの項目をクリアする
-    void clearMicrobitButton(){
+    public void clearMicrobitButton(){
         //var scrollView = GameObject.Find("Scroll View");
         var viewPort = this.gameObject.transform.Find("Viewport");
         Transform content = viewPort.transform.Find("Content");

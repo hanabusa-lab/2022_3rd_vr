@@ -126,7 +126,7 @@ public class SceneCntrl : MonoBehaviour
             int posx = Random.Range(-5, 5);
             int posy = Random.Range(0, 5);
             //コインを出す量を調整
-            if(coinThrowTiming>10){
+            if(coinThrowTiming>5){
                 this.gameObject.GetComponent<ThrowingCntrl>().ThrowingCoin(new Vector3(posx/10f,posy/10f,0f));
                 coinThrowTiming = 0;
             }
