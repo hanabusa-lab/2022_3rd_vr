@@ -12,6 +12,7 @@ public class Cube : MonoBehaviour
     [SerializeField]Material material;
     private int num = 0;
     private bool isAvatarChangeReq = false;
+    private bool isAvatarChangeReqPrevious = false;
     //画像リンク
     //string url = "https://touhoucannonball.com/assets/img/character/img_008.jpg";
     string url = "http://127.0.0.1:5555/000.jpg";
@@ -76,7 +77,7 @@ public class Cube : MonoBehaviour
             Debug.Log("isAvatarChangeReq");
             bool isNextTexFound = false;
         Debug.Log(num);
-        while(num < 99){
+        while(num < 50){
             num = num + 1;
             string urlNext = "http://127.0.0.1:5555/" + num.ToString("000") + ".jpg";
             Debug.Log (urlNext);
@@ -98,6 +99,7 @@ public class Cube : MonoBehaviour
             }
 
         }
+        
         if(isNextTexFound == false){
             num = 0;
             string urlNext = "http://127.0.0.1:5555/" + num.ToString("000") + ".jpg";
@@ -125,6 +127,63 @@ public class Cube : MonoBehaviour
         
     }
 
+
+    public IEnumerator SearchPreviousTex()
+    {
+        if(isAvatarChangeReqPrevious){
+            Debug.Log("isAvatarChangeReq");
+            bool isPreviousTexFound = false;
+        Debug.Log(num);
+        while(num > 0){
+            num = num - 1;
+            string urlNext = "http://127.0.0.1:5555/" + num.ToString("000") + ".jpg";
+            Debug.Log (urlNext);
+            UnityWebRequest www = UnityWebRequestTexture.GetTexture(urlNext);
+            yield return www.SendWebRequest();
+            if (www.isNetworkError ||www.isHttpError)
+            {
+                Debug.Log(www.error);
+                Debug.Log("fail find new tex");
+            }
+            else
+            {
+                texture = ((DownloadHandlerTexture)www.downloadHandler).texture;
+                material.SetTexture("_MainTex", texture);
+                gameObject.GetComponent<Renderer>().material = material;
+                isPreviousTexFound = true;
+                Debug.Log("found new tex");
+                break;
+            }
+
+        }
+        
+        if(isPreviousTexFound == false){
+            num = 0;
+            string urlNext = "http://127.0.0.1:5555/" + num.ToString("000") + ".jpg";
+            Debug.Log (urlNext);
+            UnityWebRequest www = UnityWebRequestTexture.GetTexture(urlNext);
+            yield return www.SendWebRequest();
+            if (www.isNetworkError ||www.isHttpError)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                texture = ((DownloadHandlerTexture)www.downloadHandler).texture;
+                material.SetTexture("_MainTex", texture);
+                gameObject.GetComponent<Renderer>().material = material;
+            }
+        }
+
+        Debug.Log(isPreviousTexFound);
+        isAvatarChangeReqPrevious = false;
+        }else{
+            Debug.Log("no AvatarChangeReq");
+        }
+        
+        
+    }
+
  
 
     void Update () {
@@ -134,12 +193,18 @@ public class Cube : MonoBehaviour
             Debug.LogFormat ("{0}秒経過", span);
             currentTime = 0f;
             StartCoroutine(SearchNextTex());
+            StartCoroutine(SearchPreviousTex());
         }
     }
 
-    public void CountAvatarNum()
+    public void ChangeAvatorNextTex()
     {
         isAvatarChangeReq = true;
+    }
+
+    public void ChangeAvatorPreviousTex()
+    {
+        isAvatarChangeReqPrevious = true;
     }
 
   
