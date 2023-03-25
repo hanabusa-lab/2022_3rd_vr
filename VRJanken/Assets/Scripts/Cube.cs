@@ -158,20 +158,28 @@ public class Cube : MonoBehaviour
         }
         
         if(isPreviousTexFound == false){
-            num = 0;
-            string urlNext = "http://127.0.0.1:5555/" + num.ToString("000") + ".jpg";
-            Debug.Log (urlNext);
-            UnityWebRequest www = UnityWebRequestTexture.GetTexture(urlNext);
-            yield return www.SendWebRequest();
-            if (www.isNetworkError ||www.isHttpError)
-            {
-                Debug.Log(www.error);
-            }
-            else
-            {
-                texture = ((DownloadHandlerTexture)www.downloadHandler).texture;
-                material.SetTexture("_MainTex", texture);
-                gameObject.GetComponent<Renderer>().material = material;
+            num = 99;
+            while(num > 0){
+                num = num - 1;
+                string urlNext = "http://127.0.0.1:5555/" + num.ToString("000") + ".jpg";
+                Debug.Log (urlNext);
+                UnityWebRequest www = UnityWebRequestTexture.GetTexture(urlNext);
+                yield return www.SendWebRequest();
+                if (www.isNetworkError ||www.isHttpError)
+                {
+                    Debug.Log(www.error);
+                    Debug.Log("fail find new tex");
+                }
+                else
+                {
+                    texture = ((DownloadHandlerTexture)www.downloadHandler).texture;
+                    material.SetTexture("_MainTex", texture);
+                    gameObject.GetComponent<Renderer>().material = material;
+                    isPreviousTexFound = true;
+                    Debug.Log("found new tex");
+                    break;
+                }
+
             }
         }
 
