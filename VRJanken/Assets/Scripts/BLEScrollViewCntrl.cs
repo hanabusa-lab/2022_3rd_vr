@@ -78,17 +78,31 @@ public class BLEScrollViewCntrl : MonoBehaviour
         return Contents;
     }
 
-    //ボタンの項目を追加する
+   //ボタンの項目を追加する
     public void addMicrobitButton(string deviceName){
         
         //var scrollView = GameObject.Find("BLEScrollView");
         //var viewPort = scrollView.transform.Find("Viewport");
     
-
-
         //var scrollView = GameObject.Find("Scroll View");
         var viewPort = this.gameObject.transform.Find("Viewport");
         Transform content = viewPort.transform.Find("Content");
+
+        //項目が存在していなかったら追加する。
+        var children = new Transform[content.childCount];
+        var childIndex = 0;
+        // 子オブジェクトを順番に配列に格納
+        foreach (Transform child in content)
+        {
+            children[childIndex++] = child;
+        }
+        for(var i = 0; i<childIndex; i++){
+            Debug.Log("Child Name["+i+"]="+children[i].name);
+            if(children[i].name==deviceName){
+                Debug.Log("already exist "+deviceName);
+                return;
+            }
+        }
 
         GameObject button = createButton(deviceName);
         button.transform.SetParent(content.transform);
