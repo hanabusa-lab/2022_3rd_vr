@@ -52,8 +52,8 @@ public class ScoreCount : MonoBehaviour
             if(jankenHand == 1){
                 source1.PlayOneShot(clip1);
                 // Destroy(collision.gameObject); //オブジェクトを消す
-                // collision.gameObject.SetActive(false);
-                score = score + 5;
+                collision.gameObject.SetActive(false);
+                score = score + 10;
             }else if (jankenHand == 2){
                 source2.PlayOneShot(clip2);
                 score = score + 2;
@@ -67,8 +67,8 @@ public class ScoreCount : MonoBehaviour
             if(jankenHand == 3){
                 source1.PlayOneShot(clip1);
                 // Destroy(collision.gameObject); //オブジェクトを消す
-                // collision.gameObject.SetActive(false);
-                score = score + 5;
+                collision.gameObject.SetActive(false);
+                score = score + 10;
             }else if (jankenHand == 1){
                 source2.PlayOneShot(clip2);
                 score = score + 2;
@@ -82,8 +82,8 @@ public class ScoreCount : MonoBehaviour
             if(jankenHand == 2){
                 source1.PlayOneShot(clip1);
                 // Destroy(collision.gameObject); //オブジェクトを消す
-                // collision.gameObject.SetActive(false);
-                score = score + 5;
+                collision.gameObject.SetActive(false);
+                score = score + 10;
             }else if (jankenHand == 3){
                 source2.PlayOneShot(clip2);
                 score = score + 2;
